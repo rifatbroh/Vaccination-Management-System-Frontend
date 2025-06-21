@@ -1,6 +1,5 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Home from './pages/Home';
 
 
 import Doctor_dashboard from './components/Dashboard/Doctor_dashboard';
@@ -8,15 +7,18 @@ import Patient_dashboard from './components/Dashboard/Patient_dashboard';
 import Admin_dashboard from './components/Dashboard/Admin_dashboard';
 import Register from './pages/Register';
 import Login from './Login';
+import Magic_Dashboard from './components/Magic_Dashboard';
+import Landing_Page from './pages/Landing_Page';
 
 
 const App = () => {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Home />} />
+        <Route path='/' element={<Landing_Page />} />
         <Route path="/registration" element={<Register />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/magic" element={<Magic_Dashboard />} />
 
 
 
