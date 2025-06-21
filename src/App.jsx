@@ -8,6 +8,7 @@ import Patient_dashboard from './components/Dashboard/Patient_dashboard';
 import Admin_dashboard from './components/Dashboard/Admin_dashboard';
 import Register from './pages/Register';
 import Login from './Login';
+import Magic_Dashboard from './components/Magic_Dashboard';
 
 
 const App = () => {
@@ -17,6 +18,7 @@ const App = () => {
         <Route path="/" element={<Home />} />
         <Route path="/registration" element={<Register />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/magic" element={<Magic_Dashboard />} />
 
 
 
