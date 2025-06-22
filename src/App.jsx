@@ -5,6 +5,7 @@ import Login from './Login';
 import Doctor_dashboard from './components/Dashboard/Doctor_dashboard';
 import Patient_dashboard from './components/Dashboard/Patient_dashboard';
 import Admin_dashboard from './components/Dashboard/admin/Admin_dashboard';
+import DoctorManagement from './components/Dashboard/admin/DoctorManagement';
 import Magic_Dashboard from './components/Magic_Dashboard';
 import Landing_Page from './pages/Landing_Page';
 import Register from './pages/Register';
@@ -24,6 +25,7 @@ const App = () => {
         <Route path="/doctor/dashboard" element={<Doctor_dashboard />} />
         <Route path="/patient/dashboard" element={<Patient_dashboard />} />
         <Route path="/admin/dashboard" element={<Admin_dashboard />} />
+        <Route path="/admin/doctor_management" element={<DoctorManagement />} />
 
       </Routes>
     </Router>
