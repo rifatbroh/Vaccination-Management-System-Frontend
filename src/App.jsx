@@ -1,14 +1,13 @@
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 
 
+import Login from './Login';
 import Doctor_dashboard from './components/Dashboard/Doctor_dashboard';
 import Patient_dashboard from './components/Dashboard/Patient_dashboard';
-import Admin_dashboard from './components/Dashboard/Admin_dashboard';
-import Register from './pages/Register';
-import Login from './Login';
+import Admin_dashboard from './components/Dashboard/admin/Admin_dashboard';
 import Magic_Dashboard from './components/Magic_Dashboard';
 import Landing_Page from './pages/Landing_Page';
+import Register from './pages/Register';
 
 
 const App = () => {
