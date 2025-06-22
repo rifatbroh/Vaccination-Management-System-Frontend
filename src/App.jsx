@@ -7,8 +7,8 @@ import Patient_dashboard from './components/Dashboard/Patient_dashboard';
 import Admin_dashboard from './components/Dashboard/admin/Admin_dashboard';
 import Magic_Dashboard from './components/Magic_Dashboard';
 import Landing_Page from './pages/Landing_Page';
-import Register from './pages/Register';
-import Login2 from './Login2';
+import Register from './components/Register';
+import Login2 from './components/Login2';
 
 
 const App = () => {
