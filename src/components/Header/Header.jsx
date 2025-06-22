@@ -25,7 +25,7 @@ const Header = () => {
           <button onClick={() => setIsLoginOpen(true)} className="cursor-pointer px-6 py-1 border border-white rounded-full shadow-md">
             Login
           </button>
-          <button onClick={() => setIsRegisterOpen(true)} className="cursor-pointer px-6 py-1 border border-white rounded-full shadow-md">
+          <button onClick={() => setIsRegisterOpen(true)} className="cursor-pointer git  px-6 py-1 border border-white rounded-full shadow-md">
             Register
           </button>
         </div>
