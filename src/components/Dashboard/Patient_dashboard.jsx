@@ -1,35 +1,35 @@
-import React from "react";
-import { FaCalendarAlt, FaSyringe } from "react-icons/fa";
+import { FaUserInjured, FaNotesMedical } from "react-icons/fa";
+import Admin_Sidebar from "./Single_components/Admin_sidebar";
+import TopNav from "./Single_components/TopNav";
 
 const Patient_dashboard = () => {
   return (
-    <div className="p-8 bg-[#f0f9ff] min-h-screen">
-      <h1 className="text-3xl font-bold mb-4">Welcome, Patient 👤</h1>
-      <p className="mb-2">
-        Manage your health records, vaccination info, and appointments.
-      </p>
+    <div className="doctor_dashboard flex">
+      {/* Sidebar */}
+      <div className="left-doctor w-[20%]">
+        <Admin_Sidebar role="patient" />
+      </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
-        {/* Appointments Card */}
-        <div className="bg-white shadow-md p-6 rounded-lg hover:shadow-xl transition-shadow duration-300">
-          <h2 className="text-xl font-semibold mb-2 flex items-center gap-2">
-            <FaCalendarAlt className="text-blue-500" /> Upcoming Appointments
-          </h2>
-          <ul className="text-gray-700 list-disc pl-5">
-            <li>Dr. Smith - 21st June</li>
-            <li>Dr. Rahman - 25th June</li>
-          </ul>
+      {/* Main content */}
+      <div className="right-doctor w-[80%] pr-20">
+        <div className="top-nav">
+          <TopNav />
         </div>
+        <div className="p-8 bg-[#fdfdfd] min-h-screen">
+          <h1 className="text-3xl font-bold mb-4">Welcome, Patients 👨‍⚕️</h1>
+          <p className="mb-2 text-2xl">Manage your appointments and patients efficiently.</p>
 
-        {/* Vaccination Card */}
-        <div className="bg-white shadow-md p-6 rounded-lg hover:shadow-xl transition-shadow duration-300">
-          <h2 className="text-xl font-semibold mb-2 flex items-center gap-2">
-            <FaSyringe className="text-green-500" /> Vaccination History
-          </h2>
-          <ul className="text-gray-700 list-disc pl-5">
-            <li>COVID-19 - <span className="text-green-600 font-medium">Completed</span></li>
-            <li>Tetanus - <span className="text-red-500 font-medium">Due</span></li>
-          </ul>
+          {/* Example placeholder cards or dashboard components */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+            <div className="bg-white p-6 rounded-xl shadow text-lg font-medium flex items-center gap-4">
+              <FaUserInjured className="text-blue-500 text-2xl" />
+              View Patients
+            </div>
+            <div className="bg-white p-6 rounded-xl shadow text-lg font-medium flex items-center gap-4">
+              <FaNotesMedical className="text-green-500 text-2xl" />
+              Manage Appointments
+            </div>
+          </div>
         </div>
       </div>
     </div>
