@@ -1,26 +1,35 @@
-import React from "react";
 import { FaUserInjured, FaNotesMedical } from "react-icons/fa";
+import Admin_Sidebar from "./Single_components/Admin_sidebar";
+import TopNav from "./Single_components/TopNav";
 
 const Doctor_dashboard = () => {
   return (
-    <div className="p-8 bg-[#fff7ed] min-h-screen">
-      <h1 className="text-3xl font-bold mb-4">Welcome, Doctor 🩺</h1>
-      <p className="mb-2">Review appointments, manage patients, and track vaccinations.</p>
+    <div className="doctor_dashboard flex">
+      {/* Sidebar */}
+      <div className="left-doctor w-[20%]">
+        <Admin_Sidebar role="doctor" />
+      </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
-        <div className="bg-white shadow-md p-6 rounded-lg">
-          <h2 className="text-xl font-semibold mb-2 flex items-center gap-2"><FaUserInjured /> Today's Appointments</h2>
-          <ul className="text-gray-700 list-disc pl-5">
-            <li>10:00 AM - Rifat Hossain</li>
-            <li>11:30 AM - Sara Ali</li>
-          </ul>
+      {/* Main content */}
+      <div className="right-doctor w-[80%] pr-20">
+        <div className="top-nav">
+          <TopNav />
         </div>
-        <div className="bg-white shadow-md p-6 rounded-lg">
-          <h2 className="text-xl font-semibold mb-2 flex items-center gap-2"><FaNotesMedical /> Patient Requests</h2>
-          <ul className="text-gray-700 list-disc pl-5">
-            <li>Update Prescription - Rahim</li>
-            <li>Vaccination query - Nayeem</li>
-          </ul>
+        <div className="p-8 bg-[#fdfdfd] min-h-screen">
+          <h1 className="text-3xl font-bold mb-4">Welcome, Doctor 👨‍⚕️</h1>
+          <p className="mb-2 text-2xl">Manage your appointments and patients efficiently.</p>
+
+          {/* Example placeholder cards or dashboard components */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+            <div className="bg-white p-6 rounded-xl shadow text-lg font-medium flex items-center gap-4">
+              <FaUserInjured className="text-blue-500 text-2xl" />
+              View Patients
+            </div>
+            <div className="bg-white p-6 rounded-xl shadow text-lg font-medium flex items-center gap-4">
+              <FaNotesMedical className="text-green-500 text-2xl" />
+              Manage Appointments
+            </div>
+          </div>
         </div>
       </div>
     </div>

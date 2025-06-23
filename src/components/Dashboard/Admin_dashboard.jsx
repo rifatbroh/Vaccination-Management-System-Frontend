@@ -17,7 +17,7 @@ const Admin_dashboard = () => {
   return (
     <div className="admin flex">
       <div className="admin-left w-[20%]">
-        <Admin_Sidebar />
+        <Admin_Sidebar role="admin" />
       </div>
 
       <div className="admin-right w-[80%] pr-20">
