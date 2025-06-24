@@ -54,7 +54,7 @@ const VaccineManager = () => {
   const submitVaccine = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("http://localhost:10/api/admin//add-vaccine", formData);
+      await axios.post("http://localhost:10/api/admin/add-vaccine", formData);
       setShowAddModal(false);
       setFormData({
         name: "",
@@ -74,29 +74,44 @@ const VaccineManager = () => {
       <h1 className="text-4xl font-bold text-center text-blue-700 mb-10">💉 Vaccine Management</h1>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {vaccines.map((vaccine) => (
-          <div key={vaccine._id} className="bg-white shadow-md rounded-xl p-5 border hover:shadow-lg transition">
-            <h2 className="text-lg font-semibold text-gray-800">{vaccine.name}</h2>
-            <p className="text-sm text-gray-600 mb-1"><strong>Manufacturer:</strong> {vaccine.manufacturer}</p>
-            <p className="text-sm text-gray-600 mb-1"><strong>Doses:</strong> {vaccine.dosesRequired}</p>
-            <p className="text-sm text-gray-600 mb-1"><strong>Gap:</strong> {vaccine.gapBetweenDoses} days</p>
-            <div className="flex justify-between mt-4">
-              <button
-                onClick={() => viewVaccine(vaccine._id)}
-                className="text-sm bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded"
-              >
-                About
-              </button>
-              <button
-                onClick={() => deleteVaccine(vaccine._id)}
-                className="text-sm bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded"
-              >
-                Remove
-              </button>
-            </div>
-          </div>
-        ))}
+  {vaccines.map((vaccine) => (
+    <div
+      key={vaccine._id}
+      className="bg-white shadow-md rounded-xl p-5 border hover:shadow-lg transition flex flex-col"
+    >
+      {/* Content section */}
+      <div className="flex-1">
+        <h2 className="text-lg font-semibold text-gray-800">{vaccine.name}</h2>
+        <p className="text-sm text-gray-600 mb-1">
+          <strong>Manufacturer:</strong> {vaccine.manufacturer}
+        </p>
+        <p className="text-sm text-gray-600 mb-1">
+          <strong>Doses:</strong> {vaccine.dosesRequired}
+        </p>
+        <p className="text-sm text-gray-600 mb-1">
+          <strong>Gap:</strong> {vaccine.gapBetweenDoses} days
+        </p>
       </div>
+
+      {/* Bottom-right buttons section */}
+      <div className="mt-auto flex justify-end gap-2 pt-4">
+        <button
+          onClick={() => viewVaccine(vaccine._id)}
+          className="text-sm bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded"
+        >
+          About
+        </button>
+        <button
+          onClick={() => deleteVaccine(vaccine._id)}
+          className="text-sm bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded"
+        >
+          Remove
+        </button>
+      </div>
+    </div>
+  ))}
+</div>
+
 
       {/* Add Vaccine Button */}
       <div className="text-center mt-10">
