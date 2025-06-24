@@ -42,7 +42,7 @@ const Admin_Sidebar = ({ role }) => {
     <div className="fixed top-0 left-0 h-screen w-64 bg-[#469b7e] flex flex-col justify-between items-center py-10 shadow-lg z-50">
       {/* Top section */}
       <div className="flex flex-col items-center w-full">
-        <h1 className="text-2xl text-center font-bold text-white mb-10">Health Horizon</h1>
+        <h1 className="text-2xl cursor-pointer text-center font-bold text-white mb-10">Health Horizon</h1>
 
         <div className="flex flex-col gap-6 w-full px-6">
           {renderMenuItems()}

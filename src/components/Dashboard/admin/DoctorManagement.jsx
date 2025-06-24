@@ -111,7 +111,7 @@ export default function DoctorManagement() {
   const pendingDoctors = doctors.filter((doc) => !doc.isApproved);
 
   return (
-    <div className="p-6  from-blue-50 to-gray-100 min-h-screen">
+    <div className="p-6  from-blue-50 to-gray-100 ">
       <h1 className="text-4xl font-bold text-center text-blue-700 mb-10">Doctor Management</h1>
 
       {loading ? (

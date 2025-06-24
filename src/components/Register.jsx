@@ -152,7 +152,7 @@ const RegisterModal = ({ onClose }) => {
 
               {role === 'doctor' && (
                 <>
-                  <div>
+                  {/* <div>
                     <label htmlFor="specialization" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
                       Specialization
                     </label>
@@ -194,7 +194,7 @@ const RegisterModal = ({ onClose }) => {
                       onChange={handleChange}
                       className="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-white dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400"
                     />
-                  </div>
+                  </div> */}
                 </>
               )}
 
