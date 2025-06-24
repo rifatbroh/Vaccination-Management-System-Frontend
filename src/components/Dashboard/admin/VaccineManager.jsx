@@ -125,7 +125,7 @@ const VaccineManager = () => {
 
       {/* Add Vaccine Modal */}
       {showAddModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
+        <div className="fixed inset-0 backdrop-blur-sm overflow-y-auto bg-opacity-40 flex items-center justify-center z-50">
           <div className="bg-white w-full max-w-xl p-6 rounded-xl shadow-lg relative">
             <button
               onClick={() => setShowAddModal(false)}
@@ -209,7 +209,7 @@ const VaccineManager = () => {
 
       {/* View Vaccine Modal */}
       {selectedVaccine && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div className="fixed inset-0 backdrop-blur-sm overflow-y-auto bg-opacity-50 flex items-center justify-center z-10">
           <div className="bg-white rounded-xl w-full max-w-lg p-6 relative shadow-lg">
             <button
               onClick={() => setSelectedVaccine(null)}

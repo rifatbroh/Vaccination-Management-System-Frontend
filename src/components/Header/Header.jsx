@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import Login2 from '../Login2';
+import Login2 from '../Login';
 import RegisterModal from '../Register'; // Import the modal
 
 const Header = () => {
