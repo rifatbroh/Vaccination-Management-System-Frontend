@@ -1,7 +1,7 @@
-import React, { useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -28,11 +28,15 @@ const Login = () => {
     setError("");
     setLoading(true);
     try {
-      const res = await axios.post("/api/auth/login", formData);
+      // Adjusted API URL to include full path
+      const res = await axios.post("http://localhost:10/api/auth/login", formData);
+
       const { token, role } = res.data;
 
+      // Store token in localStorage
       localStorage.setItem("token", token);
 
+      // Navigate based on role
       if (role === "doctor") {
         navigate("/dashboard/doctor");
       } else if (role === "patient") {
@@ -41,6 +45,7 @@ const Login = () => {
         setError("Invalid role returned from server.");
       }
     } catch (err) {
+      // Handle errors from backend
       setError(err.response?.data?.error || "Login failed");
     } finally {
       setLoading(false);

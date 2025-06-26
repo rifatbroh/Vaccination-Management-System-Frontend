@@ -5,15 +5,17 @@ import { FaCheck, FaTrash, FaUserCheck } from "react-icons/fa";
 const defaultAvatar = "https://via.placeholder.com/100?text=Doctor";
 
 export default function DoctorManagement() {
-  const [doctors, setDoctors] = useState([]);
+  const [allDoctors, setAllDoctors] = useState([]);  // All doctors (approved + unapproved)
+  const [pendingDoctors, setPendingDoctors] = useState([]); // Only unapproved doctors
   const [loading, setLoading] = useState(true);
 
-  const fetchDoctors = () => {
+  // Fetch all doctors (approved + unapproved) from the endpoint
+  const fetchAllDoctors = () => {
     setLoading(true);
-    fetch("http://localhost:10/api/landingPage/doctors")
+    fetch("http://localhost:10/api/landingPage/doctors")  // All doctors endpoint
       .then((res) => res.json())
       .then((data) => {
-        setDoctors(data);
+        setAllDoctors(data);
         setLoading(false);
       })
       .catch((err) => {
@@ -22,10 +24,22 @@ export default function DoctorManagement() {
       });
   };
 
-  useEffect(() => {
-    fetchDoctors();
-  }, []);
+  // Fetch unapproved doctors (for management purposes)
+  const fetchPendingDoctors = () => {
+    setLoading(true);
+    fetch("http://localhost:10/api/admin/unapproved-doctors")  // Unapproved doctors endpoint
+      .then((res) => res.json())
+      .then((data) => {
+        setPendingDoctors(data);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.error("Failed to fetch unapproved doctors:", err);
+        setLoading(false);
+      });
+  };
 
+  // Approve a doctor
   const approveDoctor = async (id) => {
     try {
       const res = await fetch(`http://localhost:10/api/admin/approve-doctor/${id}`, {
@@ -35,7 +49,8 @@ export default function DoctorManagement() {
 
       if (res.ok) {
         alert("Doctor approved successfully.");
-        fetchDoctors();
+        fetchPendingDoctors();  // Re-fetch unapproved doctors
+        fetchAllDoctors();      // Re-fetch all doctors
       } else {
         alert("Approval failed.");
       }
@@ -45,6 +60,7 @@ export default function DoctorManagement() {
     }
   };
 
+  // Remove a doctor
   const removeDoctor = async (id) => {
     const confirmRemove = window.confirm("Are you sure you want to remove this doctor?");
     if (!confirmRemove) return;
@@ -56,7 +72,8 @@ export default function DoctorManagement() {
 
       if (res.ok) {
         alert("Doctor removed successfully.");
-        setDoctors((prev) => prev.filter((doc) => doc._id !== id));
+        setAllDoctors((prev) => prev.filter((doc) => doc._id !== id));  // Update the all doctors list
+        setPendingDoctors((prev) => prev.filter((doc) => doc._id !== id)); // Update the pending list
       } else {
         alert("Failed to remove doctor.");
       }
@@ -66,6 +83,7 @@ export default function DoctorManagement() {
     }
   };
 
+  // Render each doctor's card
   const renderDoctorCard = (doctor) => (
     <div
       key={doctor._id}
@@ -107,32 +125,34 @@ export default function DoctorManagement() {
     </div>
   );
 
-  const approvedDoctors = doctors.filter((doc) => doc.isApproved);
-  const pendingDoctors = doctors.filter((doc) => !doc.isApproved);
+  useEffect(() => {
+    fetchAllDoctors();    // Fetch all doctors on initial load
+    fetchPendingDoctors();  // Fetch pending (unapproved) doctors
+  }, []);
 
   return (
-    <div className="p-6  from-blue-50 to-gray-100 ">
+    <div className="p-6 from-blue-50 to-gray-100 ">
       <h1 className="text-4xl font-bold text-center text-blue-700 mb-10">Doctor Management</h1>
 
       {loading ? (
         <p className="text-center text-lg text-gray-500">Loading doctors...</p>
       ) : (
         <>
-          {/* Approved Doctors */}
+          {/* All Doctors (Approved & Pending) */}
           <section className="mb-12">
             <h2 className="text-2xl font-bold text-green-700 mb-6 flex items-center gap-2">
-              <FaUserCheck /> Approved Doctors
+              <FaUserCheck /> All Doctors
             </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-              {approvedDoctors.length > 0 ? (
-                approvedDoctors.map(renderDoctorCard)
+              {allDoctors.length > 0 ? (
+                allDoctors.map(renderDoctorCard)
               ) : (
-                <p className="text-gray-500">No approved doctors found.</p>
+                <p className="text-gray-500">No doctors found.</p>
               )}
             </div>
           </section>
 
-          {/* Pending Approval */}
+          {/* Pending Approval (Unapproved Doctors) */}
           <section>
             <h2 className="text-2xl font-bold text-red-700 mb-6 flex items-center gap-2">
               🛑 Pending Approvals
@@ -141,7 +161,7 @@ export default function DoctorManagement() {
               {pendingDoctors.length > 0 ? (
                 pendingDoctors.map(renderDoctorCard)
               ) : (
-                <p className="text-gray-500">All doctors have been approved.</p>
+                <p className="text-gray-500">No pending doctors for approval.</p>
               )}
             </div>
           </section>

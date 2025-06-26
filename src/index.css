@@ -1,1 +1,28 @@
+/* global.css or styles.css */
+
 @import "tailwindcss";
+
+.input-field {
+    background-color: #52565b;
+    border: 1px solid #d1d5db;
+    color: #111827;
+    font-size: 0.875rem;
+    border-radius: 0.5rem;
+    width: 100%;
+    padding: 0.625rem;
+    box-sizing: border-box;
+}
+.button {
+    background-color: #2563eb;
+    color: #ffffff;
+    font-size: 0.875rem;
+    border-radius: 0.5rem;
+    padding: 0.625rem 1.25rem;
+    border: none;
+    cursor: pointer;
+}
+.input-field:focus {
+    outline: none;
+    border-color: #2563eb;
+    box-shadow: 0 0 0 1px rgba(37, 99, 235, 0.5);
+}
