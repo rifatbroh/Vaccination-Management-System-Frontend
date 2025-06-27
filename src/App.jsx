@@ -25,10 +25,6 @@ const App = () => {
                 <Route path="/" element={<Landing_Page />} />
                 <Route path="/registration" element={<Register />} />
                 <Route path="/login2" element={<Login2 />} />
-                <Route
-                    path="/doctor_management"
-                    element={<DoctorManagement />}
-                />
 
                 {/* Doctor & Patient Dashboards */}
 
@@ -46,7 +42,7 @@ const App = () => {
                     <Route path="dashboard" element={<Admin_dashboard />} />
                     <Route
                         path="doctor_management"
-                        // element={<DoctorManagement />}
+                        element={<DoctorManagement />}
                     />
                     <Route
                         path="Vaccine-management"

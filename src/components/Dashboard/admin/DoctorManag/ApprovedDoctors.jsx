@@ -139,7 +139,7 @@ const ApprovedDoctors = () => {
                                     <img
                                         src={
                                             doctor.profilePicture ||
-                                            "../../../../../public/Doctor.webp"
+                                            "/Doctor.webp"
                                         }
                                         alt={doctor.user?.name}
                                         className="w-32 h-32 rounded-full mb-4"
@@ -156,7 +156,7 @@ const ApprovedDoctors = () => {
                                 <div className="mt-4 flex justify-between">
                                     <button
                                         onClick={
-                                            () => openProfile(doctor._id) // Use doctor._id
+                                            () => openProfile(doctor.user._id) // Use doctor._id
                                         }
                                         className="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600"
                                     >
@@ -164,7 +164,7 @@ const ApprovedDoctors = () => {
                                     </button>
                                     <button
                                         onClick={
-                                            () => removeDoctor(doctor._id) // Use doctor._id
+                                            () => removeDoctor(doctor.user._id) // Use doctor._id
                                         }
                                         className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600"
                                     >
