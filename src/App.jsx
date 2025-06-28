@@ -26,6 +26,11 @@ const App = () => {
                 <Route path="/registration" element={<Register />} />
                 <Route path="/login2" element={<Login2 />} />
 
+                <Route
+                    path="/doctor/profile/:id"
+                    element={<Doctor_dashboard />}
+                />
+
                 {/* Doctor & Patient Dashboards */}
 
                 <Route
