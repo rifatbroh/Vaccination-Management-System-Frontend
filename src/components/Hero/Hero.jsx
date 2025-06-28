@@ -16,7 +16,7 @@ const Hero = () => {
                         <div className="btn-le">
                             <a
                                 href="booking.html"
-                                className="text-lg bg-white px-8 py-2 rounded-full text-black w-max shadow-md hover:bg-gray-100 transition"
+                                className="text-lg bg-white px-8 py-2 rounded-full font-semibold text-black w-max shadow-md hover:bg-gray-100 transition"
                             >
                                 Booking
                             </a>

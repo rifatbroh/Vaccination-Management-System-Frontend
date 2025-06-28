@@ -13,8 +13,6 @@ import VaccineManager from "./components/Dashboard/admin/VaccineManager";
 import Doctor_dashboard from "./components/Dashboard/Doctor_dashboard";
 import AdminLayout from "./components/Dashboard/Layouts/Admin_layout";
 import Patient_dashboard from "./components/Dashboard/Patient_dashboard";
-import Login2 from "./components/Login";
-import Register from "./components/Register";
 import Landing_Page from "./pages/Landing_Page";
 
 const App = () => {
@@ -23,44 +21,23 @@ const App = () => {
             <Routes>
                 {/* Public Routes */}
                 <Route path="/" element={<Landing_Page />} />
-                <Route path="/registration" element={<Register />} />
-                <Route path="/login2" element={<Login2 />} />
 
-                <Route
-                    path="/doctor/profile/:id"
-                    element={<Doctor_dashboard />}
-                />
+                <Route path="/doctor/profile/:id" element={<Doctor_dashboard />} />
+                <Route path="/doctor/dashboard" element={<Doctor_dashboard />} />
+                <Route path="/patient/dashboard" element={<Patient_dashboard />} />
 
-                {/* Doctor & Patient Dashboards */}
-
-                <Route
-                    path="/doctor/dashboard"
-                    element={<Doctor_dashboard />}
-                />
-                <Route
-                    path="/patient/dashboard"
-                    element={<Patient_dashboard />}
-                />
-
-                {/* Admin Layout with Nested Routes */}
+                {/* Admin Layout */}
                 <Route path="/admin" element={<AdminLayout />}>
                     <Route path="dashboard" element={<Admin_dashboard />} />
-                    <Route
-                        path="doctor_management"
-                        element={<DoctorManagement />}
-                    />
-                    <Route
-                        path="Vaccine-management"
-                        element={<VaccineManager />}
-                    />
+                    <Route path="doctor_management" element={<DoctorManagement />} />
+                    <Route path="Vaccine-management" element={<VaccineManager />} />
                     <Route path="/admin/all-user" element={<AllUsersTable />} />
+                    <Route index element={<Navigate to="dashboard" replace />} />
+                </Route>
 
-                    {/* Add more admin routes like /vaccine if needed */}
-
-                    <Route
-                        index
-                        element={<Navigate to="dashboard" replace />}
-                    />
+                {/* Doctor Layout */}
+                <Route path="/doctor" element={<AdminLayout />}>
+    
                 </Route>
             </Routes>
         </Router>

@@ -3,7 +3,7 @@ import Admin_Sidebar from "../Single_components/Admin_sidebar";
 import TopNav from "../Single_components/TopNav";
 import { Outlet } from "react-router-dom";
 
-const AdminLayout = () => {
+const Admin_Layout = () => {
   return (
     <div className="admin flex">
       {/* Sidebar */}
@@ -22,4 +22,4 @@ const AdminLayout = () => {
   );
 };
 
-export default AdminLayout;
+export default Admin_Layout;

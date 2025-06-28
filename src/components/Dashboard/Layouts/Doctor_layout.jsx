@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Patient_layout = () => {
+const Doctor_layout = () => {
     return (
         <div>
             
@@ -8,4 +8,4 @@ const Patient_layout = () => {
     );
 };
 
-export default Patient_layout;
+export default Doctor_layout;
