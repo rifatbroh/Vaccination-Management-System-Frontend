@@ -1,17 +1,15 @@
 import { useState } from "react";
 
-const Login2 = ({ onClose }) => {
-    // State to store form inputs and errors
+const Login2 = ({ onClose, setUser }) => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(false);
 
-    // Handle form submission
     const handleLogin = async (e) => {
         e.preventDefault();
-        setError(null); // Reset error state
-        setLoading(true); // Set loading state
+        setError(null);
+        setLoading(true);
 
         try {
             const response = await fetch("http://localhost:10/api/auth/login", {
@@ -24,20 +22,23 @@ const Login2 = ({ onClose }) => {
 
             const data = await response.json();
 
-            if (response.ok) {
-                // Handle successful login
+            if (response.ok && data.token) {
                 console.log("Login success:", data);
-                onClose(); // Close the modal
-                // You can save the token in localStorage or a global state here if needed
+                // Save token and user data in localStorage
                 localStorage.setItem("authToken", data.token);
+                localStorage.setItem("user", JSON.stringify(data.user));
+
+                // Update the user state in Header immediately
+                setUser(data.user); // Set the user data
+
+                onClose(); // Close the modal
             } else {
-                // Handle errors from the server (e.g., invalid credentials)
                 setError(data.error || "An error occurred during login.");
             }
         } catch {
             setError("Server error. Please try again later.");
         } finally {
-            setLoading(false); // Reset loading state
+            setLoading(false);
         }
     };
 
@@ -124,31 +125,6 @@ const Login2 = ({ onClose }) => {
                                 </div>
                             )}
 
-                            <div className="flex justify-between">
-                                <div className="flex items-start">
-                                    <div className="flex items-center h-5">
-                                        <input
-                                            id="remember"
-                                            type="checkbox"
-                                            className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300 dark:bg-gray-600 dark:border-gray-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800"
-                                            required
-                                        />
-                                    </div>
-                                    <label
-                                        htmlFor="remember"
-                                        className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-                                    >
-                                        Remember me
-                                    </label>
-                                </div>
-                                <a
-                                    href="#"
-                                    className="text-sm text-blue-700 hover:underline dark:text-blue-500"
-                                >
-                                    Lost Password?
-                                </a>
-                            </div>
-
                             <button
                                 type="submit"
                                 className="w-full text-white cursor-pointer bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
@@ -158,16 +134,6 @@ const Login2 = ({ onClose }) => {
                                     ? "Logging in..."
                                     : "Login to your account"}
                             </button>
-
-                            <div className="text-sm font-medium text-gray-500 dark:text-gray-300 text-center">
-                                Not registered?{" "}
-                                <a
-                                    href="#"
-                                    className="text-blue-700 hover:underline dark:text-blue-500"
-                                >
-                                    Create account
-                                </a>
-                            </div>
                         </form>
                     </div>
                 </div>
