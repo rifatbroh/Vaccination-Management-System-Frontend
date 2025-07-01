@@ -18,7 +18,7 @@ const ProfilePageDoc = () => {
     const fetchProfile = useCallback(async () => {
         try {
             const response = await fetch(
-                `http://localhost:10/api/doctor/Profile/${id}`
+                `http://localhost:10/api/landingPage/doctor/${id}`
             );
             const data = await response.json();
 

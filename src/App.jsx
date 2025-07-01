@@ -30,7 +30,7 @@ const App = () => {
                 <Route path="/doctor/profile/:id" element={<Doctor_dashboard />} />
                 {/* <Route path="/doctor/dashboard" element={<Doctor_dashboard />} /> */}
                 <Route path="/patient/dashboard" element={<Patient_dashboard />} />
-                {/* <Route path="/profile-page" element={<ProfilePageDoc />} /> */}
+                <Route path="/profile-page" element={<ProfilePageDoc />} />
 
 
                 {/* Admin Layout */}

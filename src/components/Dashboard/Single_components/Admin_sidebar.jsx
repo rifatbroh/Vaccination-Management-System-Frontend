@@ -36,7 +36,6 @@ const Admin_Sidebar = ({ role }) => {
             <MenuItem icon={<FaCalendarCheck />} label="Appointments" to="/doctor/appoinments" />
             <MenuItem icon={<FaUserMd />} label="Patient" />
             <MenuItem icon={<FaSyringe />} label="Vaccine List" to="/doctor/vaccine-list" />
-            <MenuItem icon={<FaUsers />} label="Users log" />
           </>
         );
       case "patient":
