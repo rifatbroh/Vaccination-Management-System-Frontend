@@ -1,5 +1,5 @@
-import Admin_Sidebar from "./Single_components/Admin_sidebar";
-import TopNav from "./Single_components/TopNav";
+import Admin_Sidebar from "../Single_components/Admin_sidebar";
+import TopNav from "../Single_components/TopNav";
 
 const Doctor_dashboard = () => {
     return (
@@ -18,7 +18,6 @@ const Doctor_dashboard = () => {
                 <div className="p-8 flex-1 overflow-y-auto">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
                        {/* start here */}
-
                     </div>
                 </div>
             </div>

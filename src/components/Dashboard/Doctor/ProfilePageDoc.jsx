@@ -1,8 +1,8 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useParams } from "react-router-dom";
 
-const DoctorProfile = () => {
-    const { id } = useParams(); // To get the doctor ID from the URL
+const ProfilePageDoc = () => {
+    const { id } = useParams(); // Get doctor ID from URL
     const [doctor, setDoctor] = useState(null);
     const [isEditing, setIsEditing] = useState(false);
     const [updatedProfile, setUpdatedProfile] = useState({
@@ -14,8 +14,8 @@ const DoctorProfile = () => {
     });
     const [error, setError] = useState(null);
 
-    // Fetch the doctor profile when the component mounts
-    const fetchProfile = async () => {
+    // Define fetchProfile using useCallback to avoid ESLint warning
+    const fetchProfile = useCallback(async () => {
         try {
             const response = await fetch(
                 `http://localhost:10/api/doctor/Profile/${id}`
@@ -37,11 +37,11 @@ const DoctorProfile = () => {
         } catch {
             setError("An error occurred while fetching profile data.");
         }
-    };
+    }, [id]);
 
     useEffect(() => {
         fetchProfile();
-    }, [id]);
+    }, [fetchProfile]);
 
     // Handle profile update
     const handleUpdateProfile = async (e) => {
@@ -61,11 +61,9 @@ const DoctorProfile = () => {
             const data = await response.json();
             if (response.ok) {
                 alert("Profile updated successfully!");
-                setIsEditing(false); // Exit edit mode
-                fetchProfile(); // Re-fetch the updated profile
-                // Re-fetch the updated profile
-                // You may want to trigger a reload or update state here if needed
-                window.location.reload();
+                setIsEditing(false);
+                fetchProfile(); // Refresh profile
+            } else {
                 setError(data.error || "Failed to update profile.");
             }
         } catch {
@@ -73,11 +71,11 @@ const DoctorProfile = () => {
         }
     };
 
-    // Handle input changes for editing the profile
+    // Handle input change
     const handleInputChange = (e) => {
         const { name, value } = e.target;
-        setUpdatedProfile((prevProfile) => ({
-            ...prevProfile,
+        setUpdatedProfile((prev) => ({
+            ...prev,
             [name]: value,
         }));
     };
@@ -90,46 +88,17 @@ const DoctorProfile = () => {
                 <div>
                     <h1>{doctor.user ? doctor.user.name : "Doctor Profile"}</h1>
                     <div>
-                        <p>
-                            <strong>Specialization:</strong>{" "}
-                            {doctor.specialization || "N/A"}
-                        </p>
-                        <p>
-                            <strong>Experience:</strong>{" "}
-                            {doctor.experience || 0} years
-                        </p>
-                        <p>
-                            <strong>Qualifications:</strong>{" "}
-                            {doctor.qualifications.join(", ") || "N/A"}
-                        </p>
-                        <p>
-                            <strong>Certifications:</strong>{" "}
-                            {doctor.certifications.length
-                                ? doctor.certifications.join(", ")
-                                : "N/A"}
-                        </p>
-                        <p>
-                            <strong>Working Days:</strong>{" "}
-                            {doctor.workingDays.length
-                                ? doctor.workingDays.join(", ")
-                                : "N/A"}
-                        </p>
-                        <p>
-                            <strong>Approval Status:</strong>{" "}
-                            {doctor.isApproved ? "Approved" : "Not Approved"}
-                        </p>
-                        <p>
-                            <strong>Rating:</strong>{" "}
-                            {doctor.rating || "No ratings yet"}
-                        </p>
+                        <p><strong>Specialization:</strong> {doctor.specialization || "N/A"}</p>
+                        <p><strong>Experience:</strong> {doctor.experience || 0} years</p>
+                        <p><strong>Qualifications:</strong> {doctor.qualifications.join(", ") || "N/A"}</p>
+                        <p><strong>Certifications:</strong> {doctor.certifications.length ? doctor.certifications.join(", ") : "N/A"}</p>
+                        <p><strong>Working Days:</strong> {doctor.workingDays.length ? doctor.workingDays.join(", ") : "N/A"}</p>
+                        <p><strong>Approval Status:</strong> {doctor.isApproved ? "Approved" : "Not Approved"}</p>
+                        <p><strong>Rating:</strong> {doctor.rating || "No ratings yet"}</p>
                     </div>
 
-                    {/* Show the Update button and allow editing */}
                     {!isEditing ? (
-                        <button
-                            className="update-btn"
-                            onClick={() => setIsEditing(true)}
-                        >
+                        <button className="update-btn" onClick={() => setIsEditing(true)}>
                             Update Profile
                         </button>
                     ) : (
@@ -159,18 +128,15 @@ const DoctorProfile = () => {
                                 <input
                                     type="text"
                                     name="qualifications"
-                                    value={updatedProfile.qualifications.join(
-                                        ", "
-                                    )}
-                                    onChange={(e) => {
-                                        const qualifications = e.target.value
-                                            .split(",")
-                                            .map((item) => item.trim());
-                                        setUpdatedProfile((prevProfile) => ({
-                                            ...prevProfile,
-                                            qualifications,
-                                        }));
-                                    }}
+                                    value={updatedProfile.qualifications.join(", ")}
+                                    onChange={(e) =>
+                                        setUpdatedProfile((prev) => ({
+                                            ...prev,
+                                            qualifications: e.target.value
+                                                .split(",")
+                                                .map((item) => item.trim()),
+                                        }))
+                                    }
                                 />
                             </div>
 
@@ -179,18 +145,15 @@ const DoctorProfile = () => {
                                 <input
                                     type="text"
                                     name="certifications"
-                                    value={updatedProfile.certifications.join(
-                                        ", "
-                                    )}
-                                    onChange={(e) => {
-                                        const certifications = e.target.value
-                                            .split(",")
-                                            .map((item) => item.trim());
-                                        setUpdatedProfile((prevProfile) => ({
-                                            ...prevProfile,
-                                            certifications,
-                                        }));
-                                    }}
+                                    value={updatedProfile.certifications.join(", ")}
+                                    onChange={(e) =>
+                                        setUpdatedProfile((prev) => ({
+                                            ...prev,
+                                            certifications: e.target.value
+                                                .split(",")
+                                                .map((item) => item.trim()),
+                                        }))
+                                    }
                                 />
                             </div>
 
@@ -199,18 +162,15 @@ const DoctorProfile = () => {
                                 <input
                                     type="text"
                                     name="workingDays"
-                                    value={updatedProfile.workingDays.join(
-                                        ", "
-                                    )}
-                                    onChange={(e) => {
-                                        const workingDays = e.target.value
-                                            .split(",")
-                                            .map((item) => item.trim());
-                                        setUpdatedProfile((prevProfile) => ({
-                                            ...prevProfile,
-                                            workingDays,
-                                        }));
-                                    }}
+                                    value={updatedProfile.workingDays.join(", ")}
+                                    onChange={(e) =>
+                                        setUpdatedProfile((prev) => ({
+                                            ...prev,
+                                            workingDays: e.target.value
+                                                .split(",")
+                                                .map((item) => item.trim()),
+                                        }))
+                                    }
                                 />
                             </div>
 
@@ -227,4 +187,4 @@ const DoctorProfile = () => {
     );
 };
 
-export default DoctorProfile;
+export default ProfilePageDoc;

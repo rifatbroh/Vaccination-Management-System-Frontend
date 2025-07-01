@@ -1,8 +1,23 @@
-
-import { FaTachometerAlt, FaUserMd, FaSyringe, FaUsers, FaSignOutAlt, FaCalendarCheck } from 'react-icons/fa';
-import MenuItem from './MenuItem'; // adjust path if needed
+import { useNavigate } from 'react-router-dom';
+import {
+  FaTachometerAlt,
+  FaUserMd,
+  FaSyringe,
+  FaUsers,
+  FaSignOutAlt,
+  FaCalendarCheck,
+} from 'react-icons/fa';
+import MenuItem from './MenuItem';
 
 const Admin_Sidebar = ({ role }) => {
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    localStorage.removeItem("authToken");
+    localStorage.removeItem("user");
+    navigate("/");
+  };
+
   const renderMenuItems = () => {
     switch (role) {
       case "admin":
@@ -17,10 +32,10 @@ const Admin_Sidebar = ({ role }) => {
       case "doctor":
         return (
           <>
-            <MenuItem icon={<FaTachometerAlt />} label="Dashboard" />
-            <MenuItem icon={<FaCalendarCheck />} label="Appointments" />
+            <MenuItem icon={<FaTachometerAlt />} label="Dashboard" to="/doctor/dashboard" />
+            <MenuItem icon={<FaCalendarCheck />} label="Appointments" to="/doctor/appoinments" />
             <MenuItem icon={<FaUserMd />} label="Patient" />
-            <MenuItem icon={<FaSyringe />} label="Vaccine Track" />
+            <MenuItem icon={<FaSyringe />} label="Vaccine List" to="/doctor/vaccine-list" />
             <MenuItem icon={<FaUsers />} label="Users log" />
           </>
         );
@@ -42,7 +57,9 @@ const Admin_Sidebar = ({ role }) => {
     <div className="fixed top-0 left-0 h-screen w-64 bg-[#469b7e] flex flex-col justify-between items-center py-10 shadow-lg z-50">
       {/* Top section */}
       <div className="flex flex-col items-center w-full">
-        <h1 className="text-2xl cursor-pointer text-center font-bold text-white mb-10">Health Horizon</h1>
+        <h1 className="text-2xl cursor-pointer text-center font-bold text-white mb-10">
+          Health Horizon
+        </h1>
 
         <div className="flex flex-col gap-6 w-full px-6">
           {renderMenuItems()}
@@ -50,8 +67,14 @@ const Admin_Sidebar = ({ role }) => {
       </div>
 
       {/* Bottom logout section */}
-      <div className="w-full px-6 mt-10">
-        <MenuItem icon={<FaSignOutAlt />} label="Logout" />
+      <div className="w-full px-6">
+        <div
+          onClick={handleLogout}
+          className="flex items-center gap-2 px-4 py-2 text-xl text-white hover:bg-[#3b7d68] rounded-md cursor-pointer"
+        >
+          <FaSignOutAlt />
+          Logout
+        </div>
       </div>
     </div>
   );

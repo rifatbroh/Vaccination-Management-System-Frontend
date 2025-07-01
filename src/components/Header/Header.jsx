@@ -84,11 +84,13 @@ const Header = () => {
 
                                      {/* Dashboard */}
                                     <button
-                                        onClick={() => navigate("/admin/dashboard")}
+                                        // onClick={() => navigate(`/doctor/dashboard/${user.id}`)}
+                                        onClick={() => navigate(`/doctor/dashboard`)}
                                         className="block px-4 py-2 text-sm hover:bg-gray-100 w-full text-left"
                                     >
                                         Dashboard
                                     </button>
+
 
                                     {/* Logout */}
                                     <button
