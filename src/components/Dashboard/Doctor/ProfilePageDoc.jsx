@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
 const ProfilePageDoc = () => {
@@ -81,54 +81,102 @@ const ProfilePageDoc = () => {
     };
 
     return (
-        <div className="profile-container">
-            {error && <div className="error-message">{error}</div>}
+        <div className="max-w-4xl mx-auto p-6 bg-gray-50 rounded-lg shadow-lg">
+            {error && (
+                <div className="bg-red-600 text-white p-3 rounded-md mb-4">
+                    {error}
+                </div>
+            )}
 
             {doctor ? (
                 <div>
-                    <h1>{doctor.user ? doctor.user.name : "Doctor Profile"}</h1>
-                    <div>
-                        <p><strong>Specialization:</strong> {doctor.specialization || "N/A"}</p>
-                        <p><strong>Experience:</strong> {doctor.experience || 0} years</p>
-                        <p><strong>Qualifications:</strong> {doctor.qualifications.join(", ") || "N/A"}</p>
-                        <p><strong>Certifications:</strong> {doctor.certifications.length ? doctor.certifications.join(", ") : "N/A"}</p>
-                        <p><strong>Working Days:</strong> {doctor.workingDays.length ? doctor.workingDays.join(", ") : "N/A"}</p>
-                        <p><strong>Approval Status:</strong> {doctor.isApproved ? "Approved" : "Not Approved"}</p>
-                        <p><strong>Rating:</strong> {doctor.rating || "No ratings yet"}</p>
+                    <h1 className="text-3xl font-bold text-gray-800 mb-4">
+                        {doctor.user ? doctor.user.name : "Doctor Profile"}
+                    </h1>
+
+                    <div className="space-y-4 text-lg">
+                        <p>
+                            <strong>Specialization:</strong>{" "}
+                            {doctor.specialization || "N/A"}
+                        </p>
+                        <p>
+                            <strong>Experience:</strong>{" "}
+                            {doctor.experience || 0} years
+                        </p>
+                        <p>
+                            <strong>Qualifications:</strong>{" "}
+                            {doctor.qualifications.join(", ") || "N/A"}
+                        </p>
+                        <p>
+                            <strong>Certifications:</strong>{" "}
+                            {doctor.certifications.length
+                                ? doctor.certifications.join(", ")
+                                : "N/A"}
+                        </p>
+                        <p>
+                            <strong>Working Days:</strong>{" "}
+                            {doctor.workingDays.length
+                                ? doctor.workingDays.join(", ")
+                                : "N/A"}
+                        </p>
+                        <p>
+                            <strong>Approval Status:</strong>{" "}
+                            {doctor.isApproved ? "Approved" : "Not Approved"}
+                        </p>
+                        <p>
+                            <strong>Rating:</strong>{" "}
+                            {doctor.rating || "No ratings yet"}
+                        </p>
                     </div>
 
                     {!isEditing ? (
-                        <button className="update-btn" onClick={() => setIsEditing(true)}>
+                        <button
+                            className="mt-6 bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-500"
+                            onClick={() => setIsEditing(true)}
+                        >
                             Update Profile
                         </button>
                     ) : (
-                        <form onSubmit={handleUpdateProfile}>
+                        <form
+                            onSubmit={handleUpdateProfile}
+                            className="mt-6 space-y-6"
+                        >
                             <div>
-                                <label>Specialization</label>
+                                <label className="block text-lg font-semibold mb-2">
+                                    Specialization
+                                </label>
                                 <input
                                     type="text"
                                     name="specialization"
                                     value={updatedProfile.specialization}
                                     onChange={handleInputChange}
+                                    className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                                 />
                             </div>
 
                             <div>
-                                <label>Experience (Years)</label>
+                                <label className="block text-lg font-semibold mb-2">
+                                    Experience (Years)
+                                </label>
                                 <input
                                     type="number"
                                     name="experience"
                                     value={updatedProfile.experience}
                                     onChange={handleInputChange}
+                                    className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                                 />
                             </div>
 
                             <div>
-                                <label>Qualifications</label>
+                                <label className="block text-lg font-semibold mb-2">
+                                    Qualifications
+                                </label>
                                 <input
                                     type="text"
                                     name="qualifications"
-                                    value={updatedProfile.qualifications.join(", ")}
+                                    value={updatedProfile.qualifications.join(
+                                        ", "
+                                    )}
                                     onChange={(e) =>
                                         setUpdatedProfile((prev) => ({
                                             ...prev,
@@ -137,15 +185,20 @@ const ProfilePageDoc = () => {
                                                 .map((item) => item.trim()),
                                         }))
                                     }
+                                    className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                                 />
                             </div>
 
                             <div>
-                                <label>Certifications</label>
+                                <label className="block text-lg font-semibold mb-2">
+                                    Certifications
+                                </label>
                                 <input
                                     type="text"
                                     name="certifications"
-                                    value={updatedProfile.certifications.join(", ")}
+                                    value={updatedProfile.certifications.join(
+                                        ", "
+                                    )}
                                     onChange={(e) =>
                                         setUpdatedProfile((prev) => ({
                                             ...prev,
@@ -154,15 +207,20 @@ const ProfilePageDoc = () => {
                                                 .map((item) => item.trim()),
                                         }))
                                     }
+                                    className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                                 />
                             </div>
 
                             <div>
-                                <label>Working Days</label>
+                                <label className="block text-lg font-semibold mb-2">
+                                    Working Days
+                                </label>
                                 <input
                                     type="text"
                                     name="workingDays"
-                                    value={updatedProfile.workingDays.join(", ")}
+                                    value={updatedProfile.workingDays.join(
+                                        ", "
+                                    )}
                                     onChange={(e) =>
                                         setUpdatedProfile((prev) => ({
                                             ...prev,
@@ -171,17 +229,21 @@ const ProfilePageDoc = () => {
                                                 .map((item) => item.trim()),
                                         }))
                                     }
+                                    className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                                 />
                             </div>
 
-                            <button type="submit" className="submit-btn">
+                            <button
+                                type="submit"
+                                className="w-full bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-500"
+                            >
                                 Save Changes
                             </button>
                         </form>
                     )}
                 </div>
             ) : (
-                <p>Loading profile...</p>
+                <p className="text-xl">Loading profile...</p>
             )}
         </div>
     );
