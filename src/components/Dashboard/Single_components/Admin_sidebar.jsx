@@ -45,20 +45,26 @@ const Admin_Sidebar = ({ role }) => {
                         />
                     </>
                 );
-            case "doctor":
+
+            case "doctor": {
+                // const doctor = JSON.parse(localStorage.getItem("user"));
+                // const doctorId = doctor?._id;
+
                 return (
                     <>
-                        <MenuItem
+                       <MenuItem
                             icon={<FaTachometerAlt />}
                             label="Dashboard"
+                            // to={doctorId ? `/doctor/dashboard/${doctorId}` : "/"}
                             to="/doctor/dashboard"
                         />
+
                         <MenuItem
                             icon={<FaCalendarCheck />}
                             label="Appointments"
                             to="/doctor/appoinments"
                         />
-                        <MenuItem icon={<FaUserMd />} label="Patient" />
+                        <MenuItem icon={<FaUserMd />} label="Patient" to="/doctor/profile" />
                         <MenuItem
                             icon={<FaSyringe />}
                             label="Vaccine List"
@@ -66,19 +72,21 @@ const Admin_Sidebar = ({ role }) => {
                         />
                     </>
                 );
+            }
+
             case "patient":
                 return (
                     <>
                         <MenuItem
                             icon={<FaTachometerAlt />}
-                            label="Overview"
+                            label="Dashboard"
                             to="/patient/dashboard"
                         />
-                        <MenuItem icon={<FaUserMd />} label="Does" />
-                        <MenuItem icon={<FaSyringe />} label="Vaccine" />
-                        <MenuItem icon={<FaUsers />} label="Track" />
+                        <MenuItem icon={<FaCalendarCheck />} label="Appoinments" to="/patient/appoinments" />
+                        <MenuItem icon={<FaSyringe />} label="Setting" to="/patient/settings" />
                     </>
                 );
+
             default:
                 return null;
         }
