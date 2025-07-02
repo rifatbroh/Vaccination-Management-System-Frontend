@@ -38,6 +38,31 @@ const Header = () => {
         setUser(null);
     };
 
+    // Close dropdown if clicked outside
+    useEffect(() => {
+        const closeDropdown = (e) => {
+            if (e.target.closest(".profile-dropdown") === null) {
+                setIsDropdownOpen(false);
+            }
+        };
+        document.addEventListener("click", closeDropdown);
+        return () => {
+            document.removeEventListener("click", closeDropdown);
+        };
+    }, []);
+
+    const handleDashboardRedirect = () => {
+        if (user) {
+            if (user.role === "doctor") {
+                navigate(`/doctor/dashboard/${user.id}`);
+            } else if (user.role === "patient") {
+                navigate(`/patient/dashboard/${user.id}`);
+            } else if (user.role === "admin") {
+                navigate(`/admin/dashboard`);
+            }
+        }
+    };
+
     return (
         <>
             <div className="nav-bar flex w-full h-20 bg-[#002570] justify-between px-34 items-center pt-5">
@@ -62,7 +87,7 @@ const Header = () => {
                 </div>
                 <div className="btn flex gap-5 text-xl text-white">
                     {user ? (
-                        <div className="relative">
+                        <div className="relative profile-dropdown">
                             <div className="profile mt-5">
                                 <button
                                     onClick={() =>
@@ -74,13 +99,13 @@ const Header = () => {
                                         xmlns="http://www.w3.org/2000/svg"
                                         fill="none"
                                         viewBox="0 0 24 24"
-                                        stroke-width="1.5"
+                                        strokeWidth="1.5"
                                         stroke="currentColor"
-                                        class="size-14"
+                                        className="size-14"
                                     >
                                         <path
-                                            stroke-linecap="round"
-                                            stroke-linejoin="round"
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
                                             d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
                                         />
                                     </svg>
@@ -95,11 +120,7 @@ const Header = () => {
 
                                     {/* Dashboard */}
                                     <button
-                                        onClick={() =>
-                                            navigate(
-                                                `/doctor/dashboard/${user.id}`
-                                            )
-                                        }
+                                        onClick={handleDashboardRedirect}
                                         className="block px-4 py-2 text-sm hover:bg-gray-100 w-full text-left"
                                     >
                                         Dashboard

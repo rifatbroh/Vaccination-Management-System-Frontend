@@ -69,7 +69,11 @@ const Admin_Sidebar = ({ role }) => {
             case "patient":
                 return (
                     <>
-                        <MenuItem icon={<FaTachometerAlt />} label="Overview" />
+                        <MenuItem
+                            icon={<FaTachometerAlt />}
+                            label="Overview"
+                            to="/patient/dashboard"
+                        />
                         <MenuItem icon={<FaUserMd />} label="Does" />
                         <MenuItem icon={<FaSyringe />} label="Vaccine" />
                         <MenuItem icon={<FaUsers />} label="Track" />

@@ -11,12 +11,11 @@ import AllUsersTable from "./components/Dashboard/admin/AllUsersTable";
 import DoctorManagement from "./components/Dashboard/admin/DoctorManag/DoctorManagement";
 import VaccineManager from "./components/Dashboard/admin/VaccineManager";
 import Appoinment from "./components/Dashboard/Doctor/Appoinment";
-import Doctor_dashboard from "./components/Dashboard/Doctor/Doctor_dashboard";
 import ProfilePageDoc from "./components/Dashboard/Doctor/ProfilePageDoc";
 import Vaccine_list from "./components/Dashboard/Doctor/Vaccine_list";
 import AdminLayout from "./components/Dashboard/Layouts/Admin_layout";
 import Doctor_layout from "./components/Dashboard/Layouts/Doctor_layout";
-import Patient_dashboard from "./components/Dashboard/Patient_dashboard";
+import PatientProfile from "./components/Dashboard/Patient/PataientProfilePage";
 import Landing_Page from "./pages/Landing_Page";
 
 const App = () => {
@@ -26,14 +25,14 @@ const App = () => {
                 {/* Public Routes */}
                 <Route path="/" element={<Landing_Page />} />
 
-                <Route
+                {/* <Route
                     path="/doctor/profile/:id"
                     element={<Doctor_dashboard />}
-                />
+                /> */}
                 {/* <Route path="/doctor/dashboard" element={<Doctor_dashboard />} /> */}
                 <Route
                     path="/patient/dashboard"
-                    element={<Patient_dashboard />}
+                    element={<PatientProfile id="6864c907aed4dec8deeafb85" />}
                 />
                 <Route path="/profile-page" element={<ProfilePageDoc />} />
 
