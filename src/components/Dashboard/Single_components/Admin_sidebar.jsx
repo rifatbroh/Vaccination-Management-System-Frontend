@@ -18,6 +18,10 @@ const Admin_Sidebar = ({ role }) => {
         navigate("/");
     };
 
+    // Load user once
+    const user = JSON.parse(localStorage.getItem("user"));
+    const userId = user.id;
+
     const renderMenuItems = () => {
         switch (role) {
             case "admin":
@@ -46,17 +50,13 @@ const Admin_Sidebar = ({ role }) => {
                     </>
                 );
 
-            case "doctor": {
-                // const doctor = JSON.parse(localStorage.getItem("user"));
-                // const doctorId = doctor?._id;
-
+            case "doctor":
                 return (
                     <>
-                       <MenuItem
+                        <MenuItem
                             icon={<FaTachometerAlt />}
                             label="Dashboard"
-                            // to={doctorId ? `/doctor/dashboard/${doctorId}` : "/"}
-                            to="/doctor/dashboard"
+                            to={`/doctor/dashboard/${userId}`}
                         />
 
                         <MenuItem
@@ -64,7 +64,11 @@ const Admin_Sidebar = ({ role }) => {
                             label="Appointments"
                             to="/doctor/appoinments"
                         />
-                        <MenuItem icon={<FaUserMd />} label="Patient" to="/doctor/profile" />
+                        <MenuItem
+                            icon={<FaUserMd />}
+                            label="Patient"
+                            to={`/doctor/profile/${userId}`}
+                        />
                         <MenuItem
                             icon={<FaSyringe />}
                             label="Vaccine List"
@@ -72,7 +76,6 @@ const Admin_Sidebar = ({ role }) => {
                         />
                     </>
                 );
-            }
 
             case "patient":
                 return (
@@ -80,10 +83,18 @@ const Admin_Sidebar = ({ role }) => {
                         <MenuItem
                             icon={<FaTachometerAlt />}
                             label="Dashboard"
-                            to="/patient/dashboard"
+                            to={`/patient/dashboard/${userId}`}
                         />
-                        <MenuItem icon={<FaCalendarCheck />} label="Appoinments" to="/patient/appoinments" />
-                        <MenuItem icon={<FaSyringe />} label="Setting" to="/patient/settings" />
+                        <MenuItem
+                            icon={<FaCalendarCheck />}
+                            label="Appointments"
+                            to={`/patient/appoinments/${userId}`}
+                        />
+                        <MenuItem
+                            icon={<FaSyringe />}
+                            label="Settings"
+                            to={`/patient/settings/${userId}`}
+                        />
                     </>
                 );
 
