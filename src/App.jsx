@@ -17,6 +17,9 @@ import Patient_appoinments from "./components/Dashboard/Patient/Patient_appoinme
 import Patient_dashboard from "./components/Dashboard/Patient/Patient_dashboard";
 import Landing_Page from "./pages/Landing_Page";
 import DoctorProfile from "./components/Dashboard/Doctor/DotorProfile";
+import PatientProfile from "./components/Dashboard/Patient/PatientProfile";
+
+import Medical_history from "./components/Dashboard/Patient/Medical_history";
 
 
 const App = () => {
@@ -26,6 +29,8 @@ const App = () => {
                 {/* Public Routes */}
                 <Route path="/" element={<Landing_Page />} />
                 <Route path="/ap" element={<Patient_appoinments />} />
+                <Route path="/medicalhistory/:id" element={<Medical_history />} />
+                <Route path="/taking-appointment/:id" element={<Patient_appoinments/>} />
                 {/* <Route path="/doc/:id" element={<DoctorProfile />} /> */}
                 
 
@@ -51,7 +56,7 @@ const App = () => {
 
                 {/* Patient Layout */}
                 <Route path="/patient" element={<Patient_layout />}>
-                    <Route path="dashboard/:id" element={<Patient_dashboard />} />
+                    <Route path="dashboard/:id" element={<PatientProfile/>} />
                     <Route path="appoinments/:id" element={<Patient_appoinments />} />
                     <Route path="settings/:id" element={<Patient_settings />} />
 
