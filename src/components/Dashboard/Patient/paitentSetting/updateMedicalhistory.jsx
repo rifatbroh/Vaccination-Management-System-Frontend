@@ -95,7 +95,7 @@ const UpdateMedicalHistory = ({ id }) => {
     }
 
     return (
-        <div className="p-6 max-w-4xl mx-auto bg-white shadow rounded-xl">
+        <div className="p-6 max-w-4xl mt-10 mx-auto bg-white shadow rounded-xl">
             <h2 className="text-3xl font-bold mb-6 text-blue-700">
                 📝 Update Medical History
             </h2>

@@ -8,7 +8,7 @@ import {
     FaUserTag,
 } from "react-icons/fa";
 
-const PatientProfile = ({ id }) => {
+const Patient_dashboard = ({ id }) => {
     const [patient, setPatient] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -18,7 +18,7 @@ const PatientProfile = ({ id }) => {
         const fetchPatientProfile = async () => {
             try {
                 const res = await axios.get(
-                    `http://localhost:10/api/patient/getprofile/${id}`
+                    `http://localhost:10/api/patient/${id}`
                 );
                 setPatient(res.data);
             } catch (err) {
@@ -179,4 +179,4 @@ const PatientProfile = ({ id }) => {
     );
 };
 
-export default PatientProfile;
+export default Patient_dashboard;
