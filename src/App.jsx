@@ -11,7 +11,7 @@ import AllUsersTable from "./components/Dashboard/admin/AllUsersTable";
 import DoctorManagement from "./components/Dashboard/admin/DoctorManag/DoctorManagement";
 import VaccineManager from "./components/Dashboard/admin/VaccineManager";
 import Doctor_dashboard from "./components/Dashboard/Doctor/Doctor_dashboard";
-import Patient from "./components/Dashboard/Doctor/Patient";
+// import Patient from "./components/Dashboard/Doctor/Patient";
 import Vaccine_list from "./components/Dashboard/Doctor/Vaccine_list";
 import Admin_Layout from "./components/Dashboard/Layouts/Admin_layout";
 import Doctor_layout from "./components/Dashboard/Layouts/Doctor_layout";
@@ -70,7 +70,7 @@ const App = () => {
                         path="appoinments/:id"
                         element={<BookAppointmentForm />}
                     />
-                    <Route path="profile/:id" element={<Patient />} />
+
                     <Route path="vaccine-list" element={<Vaccine_list />} />
 
                     <Route

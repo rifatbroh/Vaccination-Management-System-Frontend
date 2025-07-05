@@ -1,74 +1,103 @@
-import React, { useState, useEffect } from 'react';
+import axios from "axios";
+import { useEffect, useState } from "react";
 
 const Counter = () => {
-  const [patients, setPatients] = useState(0);
-  const [doctors, setDoctors] = useState(0);
-  const [vaccinations, setVaccinations] = useState(0);
+    const [patients, setPatients] = useState(0);
+    const [doctors, setDoctors] = useState(0); // No doctors count in API response, so I'll keep it 0 or you can remove it if needed
+    const [vaccinations, setVaccinations] = useState(0);
+    const [loading, setLoading] = useState(true); // Loading state for visual feedback
+    const [error, setError] = useState(null); // Error state for handling API failure
 
-  const targetPatients = 20;
-  const targetDoctors = 4;
-  const targetVaccinations = 7;
-
-  useEffect(() => {
+    // Animate helper function
     const animateValue = (setValue, target) => {
-      let current = 0;
-      const duration = 1000;
-      const stepTime = Math.max(Math.floor(duration / target), 50);
+        let current = 0;
+        const duration = 1000;
+        const stepTime = Math.max(Math.floor(duration / target), 50);
 
-      const timer = setInterval(() => {
-        current += 1;
-        setValue(current);
-        if (current >= target) {
-          clearInterval(timer);
-        }
-      }, stepTime);
+        const timer = setInterval(() => {
+            current += 1;
+            setValue(current);
+            if (current >= target) {
+                clearInterval(timer);
+            }
+        }, stepTime);
     };
 
-    animateValue(setPatients, targetPatients);
-    animateValue(setDoctors, targetDoctors);
-    animateValue(setVaccinations, targetVaccinations);
-  }, []);
+    useEffect(() => {
+        // Fetch real data from API
+        const fetchData = async () => {
+            try {
+                setLoading(true); // Set loading to true before fetching data
+                const res = await axios.get(
+                    "http://localhost:10/api/landingPage/heroCard"
+                );
+                const data = res.data;
 
-  return (
-    <div>
-      <div className="card flex justify-center gap-20 bg-[#002570] mt-20 mx-60 rounded-xl shadow-lg">
-        <div className="card-1 h-40 w-60 flex flex-col justify-center items-center">
-          <h1 className="text-6xl font-bold text-[#e1eeff]">{patients}+</h1>
-          <p className="text-3xl text-white">Patients</p>
+                // Check if the API response has the required fields
+                if (
+                    data &&
+                    data.numberOfPatients !== undefined &&
+                    data.numberOfVaccines !== undefined
+                ) {
+                    animateValue(setPatients, data.numberOfPatients || 0);
+                    animateValue(setDoctors, 4); // or 0 if you prefer
+                    animateValue(setVaccinations, data.numberOfVaccines || 0);
+                } else {
+                    setError("Invalid API response");
+                }
+            } catch (error) {
+                setError("Failed to fetch data.");
+                console.error("Error fetching data:", error);
+            } finally {
+                setLoading(false); // Set loading to false once the API call completes
+            }
+        };
+
+        fetchData();
+    }, []);
+
+    // Show loading state while fetching data
+    if (loading) {
+        return (
+            <div className="text-center p-6 text-blue-600 font-semibold">
+                Loading data...
+            </div>
+        );
+    }
+
+    // Show error message if fetching failed
+    if (error) {
+        return (
+            <div className="text-center p-6 text-red-600 font-semibold">
+                {error}
+            </div>
+        );
+    }
+
+    return (
+        <div>
+            <div className="card flex justify-center gap-20 bg-[#002570] mt-20 mx-60 rounded-xl shadow-lg">
+                <div className="card-1 h-40 w-60 flex flex-col justify-center items-center">
+                    <h1 className="text-6xl font-bold text-[#e1eeff]">
+                        {patients}+
+                    </h1>
+                    <p className="text-3xl text-white">Patients</p>
+                </div>
+                <div className="card-1 h-40 w-60 flex flex-col justify-center items-center">
+                    <h1 className="text-6xl font-bold text-[#e1eeff]">
+                        {doctors.toString().padStart(2, "0")}+
+                    </h1>
+                    <p className="text-3xl text-white mr-5">Doctors</p>
+                </div>
+                <div className="card-1 h-40 w-60 flex flex-col justify-center items-center">
+                    <h1 className="text-6xl font-bold text-[#e1eeff]">
+                        {vaccinations.toString().padStart(2, "0")}+
+                    </h1>
+                    <p className="text-3xl text-white">Vaccination</p>
+                </div>
+            </div>
         </div>
-        <div className="card-1 h-40 w-60 flex flex-col justify-center items-center">
-          <h1 className="text-6xl font-bold text-[#e1eeff]">
-            {doctors.toString().padStart(2, '0')}+
-          </h1>
-          <p className="text-3xl text-white mr-5">Doctors</p>
-        </div>
-        <div className="card-1 h-40 w-60 flex flex-col justify-center items-center">
-          <h1 className="text-6xl font-bold text-[#e1eeff]">
-            {vaccinations.toString().padStart(2, '0')}+
-          </h1>
-          <p className="text-3xl text-white">Vaccination</p>
-        </div>
-      </div>
-    </div>
-  );
+    );
 };
-
-// Want to load from real-time API/database later?
-// Just replace targetPatients, targetDoctors, etc., with values fetched from your backend using axios or fetch, like:
-
-// js
-// Copy
-// Edit
-// useEffect(() => {
-//   fetch('/api/dashboard-data')
-//     .then(res => res.json())
-//     .then(data => {
-//       animateValue(setPatients, data.patients);
-//       animateValue(setDoctors, data.doctors);
-//       animateValue(setVaccinations, data.vaccinations);
-//     });
-// }, []);
-
-// double check commit
 
 export default Counter;
