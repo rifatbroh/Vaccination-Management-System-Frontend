@@ -1,14 +1,17 @@
-// components/DashboardCard.jsx
-import React from "react";
-
-const DashboardCard = ({ title, value, color, icon }) => {
-  return (
-    <div className={`bg-[#469b7e] shadow-md p-10 rounded-lg text-center hover:scale-105 transition-transform`}>
-      <div className="text-3xl mb-2">{icon}</div>
-      <h2 className="text-xl font-semibold">{title}</h2>
-      <p className={`text-3xl font-bold text-white ${color} mt-2`}>{value}</p>
-    </div>
-  );
+const DashboardCard = ({ title, value, icon, bgColor }) => {
+    return (
+        <div className={`bg-gradient-to-br ${bgColor} text-white p-8 rounded-2xl shadow-lg transform hover:scale-105 transition-transform duration-300 ease-in-out`}>
+            <div className="flex items-center justify-between">
+                <div>
+                    <h2 className="text-2xl font-semibold">{title}</h2>
+                    <p className="text-4xl font-bold mt-2">{value}</p>
+                </div>
+                <div className="text-5xl opacity-30">
+                    {icon}
+                </div>
+            </div>
+        </div>
+    );
 };
 
 export default DashboardCard;

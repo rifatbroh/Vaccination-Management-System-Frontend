@@ -61,7 +61,7 @@ const Admin_Sidebar = ({ role }) => {
                         <MenuItem
                             icon={<FaCalendarCheck />}
                             label="Appointments"
-                            to="/doctor/appointments" // Fixed spelling
+                            to="/doctor/appointments/" // Fixed spelling
                         />
 
                         <MenuItem

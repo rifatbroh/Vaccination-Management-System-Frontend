@@ -20,59 +20,59 @@ const Admin_dashboard = () => {
     }, []);
 
     return (
-        <div className="admin flex">
-            <div className="admin-left w-[20%]">
+        <div className="flex bg-gray-100 min-h-screen">
+            <div className="">
                 <Admin_Sidebar role="admin" />
             </div>
 
-            <div className="admin-right w-[80%]  pr-20">
-                <div className="p-8 bg-[#fdfdfd] ">
-                    <h1 className="text-3xl font-bold mb-4">
+            <div className=" p-10 transition-all duration-300">
+                <div className="mb-8">
+                    <h1 className="text-4xl font-extrabold text-gray-800 mb-2 animate-fade-in-down">
                         Welcome, Admin 🛡️
                     </h1>
-                    <p className="mb-2 text-2xl ">
+                    <p className="text-lg text-gray-600">
                         Monitor the system, users, doctors, and patient data.
                     </p>
-
-                    {!stats ? (
-                        <p className="mt-6 text-gray-500">
-                            Loading dashboard data...
-                        </p>
-                    ) : (
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
-                            <DashboardCard
-                                title="Total Patients"
-                                value={stats.totalPatients}
-                                color="text-4xl"
-                                icon={<FaUserShield />}
-                            />
-                            <DashboardCard
-                                title="Total Doctors"
-                                value={stats.totalDoctors}
-                                color="text-4xl"
-                                icon={<FaUserMd />}
-                            />
-                            <DashboardCard
-                                title="Appointments Today"
-                                value={stats.totalAppointments}
-                                color="text-4xl"
-                                icon={<FaCalendarCheck />}
-                            />
-                            <DashboardCard
-                                title="Total Vaccines"
-                                value={stats.totalVaccines}
-                                color="text-4xl"
-                                icon={<FaSyringe />}
-                            />
-                            <DashboardCard
-                                title="Total Users"
-                                value={stats.totalUsers}
-                                color="text-4xl text-white"
-                                icon={<FaUsers />}
-                            />
-                        </div>
-                    )}
                 </div>
+
+                {!stats ? (
+                    <p className="text-gray-500 text-lg mt-10 animate-pulse">
+                        Loading dashboard data...
+                    </p>
+                ) : (
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <DashboardCard
+                            title="Total Patients"
+                            value={stats.totalPatients}
+                            icon={<FaUserShield />}
+                            bgColor="from-green-400 to-green-600"
+                        />
+                        <DashboardCard
+                            title="Total Doctors"
+                            value={stats.totalDoctors}
+                            icon={<FaUserMd />}
+                            bgColor="from-blue-400 to-blue-600"
+                        />
+                        <DashboardCard
+                            title="Appointments Today"
+                            value={stats.totalAppointments}
+                            icon={<FaCalendarCheck />}
+                            bgColor="from-purple-400 to-purple-600"
+                        />
+                        <DashboardCard
+                            title="Total Vaccines"
+                            value={stats.totalVaccines}
+                            icon={<FaSyringe />}
+                            bgColor="from-yellow-400 to-yellow-600"
+                        />
+                        <DashboardCard
+                            title="Total Users"
+                            value={stats.totalUsers}
+                            icon={<FaUsers />}
+                            bgColor="from-pink-400 to-pink-600"
+                        />
+                    </div>
+                )}
             </div>
         </div>
     );

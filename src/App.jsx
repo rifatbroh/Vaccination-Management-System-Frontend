@@ -39,6 +39,8 @@ const App = () => {
                     path="/taking-appointment/:id"
                     element={<Patient_appoinments />}
                 />
+                
+
                 {/* <Route path="/doc/:id" element={<DoctorProfile />} /> */}
 
                 {/* Admin Layout */}
@@ -67,7 +69,7 @@ const App = () => {
                         element={<Doctor_dashboard />}
                     />
                     <Route
-                        path="appoinments/:id"
+                        path="appointments/:id"
                         element={<BookAppointmentForm />}
                     />
 

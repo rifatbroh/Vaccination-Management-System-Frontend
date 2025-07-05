@@ -1,3 +1,5 @@
+import React from "react";
+
 const Hero = () => {
     return (
         <div>
@@ -5,10 +7,12 @@ const Hero = () => {
                 {/* Starting hero area */}
                 <div className="hero-content flex justify-start w-full gap-15 px-35">
                     <div className="hero-left max-w-lg pt-20">
-                        <p className="text-7xl text-white font-bold">
+                        {/* Added animation classes to the h1 */}
+                        <p className="text-7xl text-white font-bold animate-fadeInUp">
                             Best caring, <br /> Better Doctors
                         </p>
-                        <p className="text-xl text-white py-10">
+                        {/* Added animation classes to the p tag with a slight delay */}
+                        <p className="text-xl text-white py-10 animate-fadeInUp animate-delay-200">
                             We have the most powerful Doctors, Vaccination,
                             and Treatments all over the world. We treat you like a friend
                             and serve properly.
@@ -27,6 +31,29 @@ const Hero = () => {
                     </div>
                 </div>
             </div>
+            {/* Added style block for the new animations */}
+            <style>
+                {`
+                @keyframes fadeInUp {
+                    0% {
+                        opacity: 0;
+                        transform: translateY(20px);
+                    }
+                    100% {
+                        opacity: 1;
+                        transform: translateY(0);
+                    }
+                }
+
+                .animate-fadeInUp {
+                    animation: fadeInUp 0.8s ease-out forwards;
+                }
+
+                .animate-delay-200 {
+                    animation-delay: 0.2s;
+                }
+                `}
+            </style>
         </div>
     );
 };
