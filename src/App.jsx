@@ -22,7 +22,6 @@ import PatientProfile from "./components/Dashboard/Patient/patientProfile/Patien
 import Landing_Page from "./pages/Landing_Page";
 
 import DoctorAppointments from "./components/Dashboard/Doctor/AppoinmentManagement";
-import { default as Medical_history } from "./components/Dashboard/Patient/patientProfile/Medical_history";
 
 const App = () => {
     return (
@@ -30,69 +29,34 @@ const App = () => {
             <Routes>
                 {/* Public Routes */}
                 <Route path="/" element={<Landing_Page />} />
-                <Route path="/ap" element={<Patient_appoinments />} />
-                <Route
-                    path="/medicalhistory/:id"
-                    element={<Medical_history />}
-                />
-                <Route
-                    path="/taking-appointment/:id"
-                    element={<Patient_appoinments />}
-                />
-
-                {/* <Route path="/doc/:id" element={<DoctorProfile />} /> */}
+                
 
                 {/* Admin Layout */}
                 <Route path="/admin" element={<Admin_Layout />}>
                     <Route path="dashboard" element={<Admin_dashboard />} />
-                    <Route
-                        path="doctor_management"
-                        element={<DoctorManagement />}
-                    />
-                    <Route
-                        path="Vaccine-management"
-                        element={<VaccineManager />}
-                    />
+                    <Route path="doctor_management" element={<DoctorManagement />} />
+                    <Route path="Vaccine-management" element={<VaccineManager />} />
                     <Route path="all-user" element={<AllUsersTable />} />
 
-                    <Route
-                        index
-                        element={<Navigate to="dashboard" replace />}
-                    />
+                    <Route index element={<Navigate to="dashboard" replace />} />
                 </Route>
 
                 {/* Doctor Layout */}
                 <Route path="/doctor" element={<Doctor_layout />}>
-                    <Route
-                        path="dashboard/:id"
-                        element={<Doctor_dashboard />}
-                    />
-                    <Route
-                        path="appointments/:id"
-                        element={<DoctorAppointments />}
-                    />
-
+                    <Route path="dashboard/:id" element={<Doctor_dashboard />} />
+                    <Route path="appointments/:id" element={<DoctorAppointments />} />
                     <Route path="vaccine-list" element={<Vaccine_list />} />
 
-                    <Route
-                        index
-                        element={<Navigate to="dashboard" replace />}
-                    />
+                    <Route index element={<Navigate to="dashboard" replace />} />
                 </Route>
 
                 {/* Patient Layout */}
                 <Route path="/patient" element={<Patient_layout />}>
                     <Route path="dashboard/:id" element={<PatientProfile />} />
-                    <Route
-                        path="appointments/:id"
-                        element={<Patient_appoinments />}
-                    />{" "}
-                    {/* ✅ FIXED */}
+                    <Route path="appointments/:id" element={<Patient_appoinments />}/>
                     <Route path="settings/:id" element={<Patient_settings />} />
-                    <Route
-                        index
-                        element={<Navigate to="dashboard" replace />}
-                    />
+
+                    <Route index element={<Navigate to="dashboard" replace />} />
                 </Route>
             </Routes>
         </Router>

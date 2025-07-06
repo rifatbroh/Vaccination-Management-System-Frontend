@@ -3,7 +3,7 @@ import React from "react";
 const Hero = () => {
     return (
         <div>
-            <div className="hero-area w-full h-[800px] bg-[#002570] flex items-center justify-start rounded-b-[300px]">
+            <div className="hero-area w-full h-[710px] bg-[#002570] flex items-center justify-start rounded-b-[300px]">
                 {/* Starting hero area */}
                 <div className="hero-content flex justify-start w-full gap-15 px-35">
                     <div className="hero-left max-w-lg pt-20">

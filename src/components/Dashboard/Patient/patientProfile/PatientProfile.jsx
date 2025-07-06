@@ -14,7 +14,7 @@ import {
 import { useParams } from "react-router-dom";
 import { useSpring, animated } from "@react-spring/web";
 
-const FancyPatientProfile = () => {
+const PatientProfile = () => {
   const { id: userId } = useParams();
   const [patient, setPatient] = useState(null);
   const [medicalHistory, setMedicalHistory] = useState(null);
@@ -196,4 +196,4 @@ const FancyPatientProfile = () => {
   );
 };
 
-export default FancyPatientProfile;
+export default PatientProfile;

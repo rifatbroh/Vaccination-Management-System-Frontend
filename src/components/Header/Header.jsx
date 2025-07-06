@@ -1,30 +1,31 @@
 import { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
 import Login2 from "../Authintication/Login";
 import RegisterModal from "../Authintication/Register";
+import { useNavigate } from "react-router-dom";
 
-const Header = () => {
+const Header = ({
+    onScrollToHero,
+    onScrollToAbout,
+    onScrollToCampaign,
+    onScrollToContact,
+}) => {
     const [isLoginOpen, setIsLoginOpen] = useState(false);
     const [isRegisterOpen, setIsRegisterOpen] = useState(false);
-    const [user, setUser] = useState(null); // To store the logged-in user details
+    const [user, setUser] = useState(null);
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const navigate = useNavigate();
 
-    // Function to load user data from localStorage
     const loadUserData = () => {
         const token = localStorage.getItem("authToken");
         const userData = JSON.parse(localStorage.getItem("user"));
         if (token && userData) {
-            setUser(userData); // Set user data if token exists
+            setUser(userData);
         }
     };
 
     useEffect(() => {
         loadUserData();
-        // Add event listener to detect localStorage changes
-        const handleStorageChange = () => {
-            loadUserData();
-        };
+        const handleStorageChange = () => loadUserData();
         window.addEventListener("storage", handleStorageChange);
         return () => {
             window.removeEventListener("storage", handleStorageChange);
@@ -34,11 +35,10 @@ const Header = () => {
     const handleLogout = () => {
         localStorage.removeItem("authToken");
         localStorage.removeItem("user");
-        navigate("/");
         setUser(null);
+        navigate("/");
     };
 
-    // Close dropdown if clicked outside
     useEffect(() => {
         const closeDropdown = (e) => {
             if (e.target.closest(".profile-dropdown") === null) {
@@ -69,22 +69,24 @@ const Header = () => {
                 <div className="logo">
                     <p className="text-4xl font-bold text-white">Medico</p>
                 </div>
+
                 <div className="nav-items">
                     <ul className="flex gap-10 text-xl text-white ml-15 font-semibold">
-                        <li className="hover:underline">
-                            <Link to="/">Home</Link>
+                        <li className="hover:underline cursor-pointer">
+                            <button onClick={onScrollToHero}>Home</button>
                         </li>
-                        <li className="hover:underline">
-                            <a href="#bottom-section">About</a>
+                        <li className="hover:underline cursor-pointer">
+                            <button onClick={onScrollToAbout}>About</button>
                         </li>
-                        <li className="hover:underline">
-                            <a href="#">Campaign</a>
+                        <li className="hover:underline cursor-pointer">
+                            <button onClick={onScrollToCampaign}>Campaign</button>
                         </li>
-                        <li className="hover:underline">
-                            <a href="#">Contact us</a>
+                        <li className="hover:underline cursor-pointer">
+                            <button onClick={onScrollToContact}>Contact Us</button>
                         </li>
                     </ul>
                 </div>
+
                 <div className="btn flex gap-5 text-xl text-white">
                     {user ? (
                         <div className="relative profile-dropdown">
@@ -113,20 +115,15 @@ const Header = () => {
                             </div>
                             {isDropdownOpen && (
                                 <div className="absolute right-0 mt-2 w-48 bg-white text-black shadow-lg rounded-lg py-2 z-50">
-                                    {/* User Info */}
                                     <div className="px-4 py-2 border-b border-gray-200 font-semibold">
                                         👤 {user.name}
                                     </div>
-
-                                    {/* Dashboard */}
                                     <button
                                         onClick={handleDashboardRedirect}
                                         className="block px-4 py-2 text-sm hover:bg-gray-100 w-full text-left"
                                     >
                                         Dashboard
                                     </button>
-
-                                    {/* Logout */}
                                     <button
                                         onClick={handleLogout}
                                         className="block px-4 py-2 text-sm hover:bg-gray-100 w-full text-left"
@@ -159,7 +156,7 @@ const Header = () => {
             {isLoginOpen && (
                 <Login2
                     onClose={() => setIsLoginOpen(false)}
-                    setUser={setUser} // Pass the setUser function
+                    setUser={setUser}
                 />
             )}
             {isRegisterOpen && (

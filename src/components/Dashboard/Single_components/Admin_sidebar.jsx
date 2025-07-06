@@ -87,11 +87,11 @@ const Admin_Sidebar = ({ role }) => {
   const adminSidebarClasses = "fixed top-0 left-0 h-screen w-64 flex flex-col justify-between z-50 font-sans bg-gradient-to-b from-gray-900 to-gray-800 shadow-2xl text-gray-100";
 
   // Doctor & Patient sidebar styles (your original green style)
-  const simpleSidebarClasses = "fixed top-0 left-0 h-screen w-64 bg-[#469b7e] flex flex-col justify-between items-center py-10 shadow-lg z-50 text-white";
+  const simpleSidebarClasses = "fixed  h-screen w-64 bg-[#212121] flex flex-col justify-between items-center py-10 text-white";
 
   // Logo classes for admin and others
   const adminLogoClasses = "px-6 py-8 cursor-pointer select-none text-3xl font-extrabold tracking-wide flex items-center justify-center gap-2 border-b border-gray-700 text-white hover:text-blue-400 transition-colors duration-300";
-  const simpleLogoClasses = "text-2xl cursor-pointer text-center font-bold text-white mb-10";
+  const simpleLogoClasses = "text-3xl cursor-pointer text-center font-bold text-white mb-10";
 
   // Logout button classes
   const adminLogoutBtnClasses = "w-full flex items-center justify-center gap-3 py-3 rounded-lg transition-colors duration-200 shadow-md text-white font-semibold bg-red-700 hover:bg-red-800";
@@ -130,19 +130,29 @@ const Admin_Sidebar = ({ role }) => {
     );
   }
 
-  // Doctor & Patient simple style, no animation, centered items
-  return (
-    <div className={simpleSidebarClasses}>
-      <Logo />
-      <div className="flex flex-col gap-6 w-full px-6">{renderMenuItems()}</div>
-      <div className="w-full px-6">
+// Doctor & Patient simple style, no animation, centered items
+return (
+  <div className={simpleSidebarClasses}>
+    <Logo />
+    
+    {/* Wrapper with flex-grow to push logout to bottom */}
+    <div className="flex flex-col justify-between w-full h-full px-6">
+      {/* Top menu items */}
+      <div className="flex flex-col gap-6">
+        {renderMenuItems()}
+      </div>
+
+      {/* Logout at bottom */}
+      <div className="pb-4">
         <div onClick={handleLogout} className={simpleLogoutBtnClasses}>
           <FaSignOutAlt />
           Logout
         </div>
       </div>
     </div>
-  );
+  </div>
+);
+
 };
 
 export default Admin_Sidebar;
