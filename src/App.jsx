@@ -21,7 +21,7 @@ import Patient_appoinments from "./components/Dashboard/Patient/Patient_appoinme
 import PatientProfile from "./components/Dashboard/Patient/patientProfile/PatientProfile";
 import Landing_Page from "./pages/Landing_Page";
 
-import BookAppointmentForm from "./components/Dashboard/Patient/BookAppointmentForm";
+import DoctorAppointments from "./components/Dashboard/Doctor/AppoinmentManagement";
 import { default as Medical_history } from "./components/Dashboard/Patient/patientProfile/Medical_history";
 
 const App = () => {
@@ -69,7 +69,7 @@ const App = () => {
                     />
                     <Route
                         path="appointments/:id"
-                        element={<BookAppointmentForm />}
+                        element={<DoctorAppointments />}
                     />
 
                     <Route path="vaccine-list" element={<Vaccine_list />} />
