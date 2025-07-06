@@ -1,171 +1,184 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 
-// Doctor Details Modal
-const DoctorDetailsModal = ({ doctor, onClose }) => {
-    if (!doctor) return null;
+// Confirmation Modal component
+const ConfirmRemoveModal = ({ userName, onCancel, onConfirm }) => (
+  <div className="fixed inset-0 flex items-center justify-center backdrop-blur-sm overflow-y-auto bg-opacity-50 z-50">
+    <div className="bg-white rounded-xl shadow-lg max-w-md w-full p-6 space-y-4 animate-fade-in">
+      <h2 className="text-xl font-bold text-red-600">Confirm Deletion</h2>
+      <p className="text-gray-700">
+        Are you sure you want to remove <strong>{userName}</strong>? This action cannot be undone.
+      </p>
+      <div className="flex justify-end gap-4 mt-4">
+        <button
+          onClick={onCancel}
+          className="px-4 py-2 bg-gray-100 text-gray-700 rounded hover:bg-gray-200 transition"
+        >
+          Cancel
+        </button>
+        <button
+          onClick={onConfirm}
+          className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 transition"
+        >
+          Confirm
+        </button>
+      </div>
+    </div>
+  </div>
+);
 
-    return (
-        <div className="fixed inset-0 flex justify-center items-center backdrop-blur-sm overflow-y-auto">
-            <div className="bg-white p-6 rounded-md shadow-lg w-96">
-                <h2 className="text-2xl font-bold mb-4">Doctor Details</h2>
-                <div className="text-sm text-gray-700 space-y-2">
-                    <p>
-                        <strong>Name:</strong> {doctor.user?.name || "N/A"}
-                    </p>
-                    <p>
-                        <strong>Email:</strong> {doctor.user?.email || "N/A"}
-                    </p>
-                    <p>
-                        <strong>Specialization:</strong>{" "}
-                        {doctor.specialization || "N/A"}
-                    </p>
-                    <p>
-                        <strong>Experience:</strong>{" "}
-                        {doctor.experience || "N/A"} years
-                    </p>
-                    <p>
-                        <strong>Qualifications:</strong>{" "}
-                        {doctor.qualifications?.join(", ") || "N/A"}
-                    </p>
-                    <p>
-                        <strong>Status:</strong>{" "}
-                        {doctor.isApproved ? "Approved" : "Not Approved"}
-                    </p>
-                </div>
-                <div className="mt-4 flex justify-end">
-                    <button
-                        onClick={onClose}
-                        className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
-                    >
-                        Close
-                    </button>
-                </div>
-            </div>
+// Doctor Details Modal (unchanged)
+const DoctorDetailsModal = ({ doctor, onClose }) => {
+  if (!doctor) return null;
+
+  return (
+    <div
+      className="fixed inset-0 bg-opacity-30 backdrop-blur-sm flex justify-center items-center z-50"
+      onClick={onClose}
+    >
+      <div
+        className="bg-white p-6 rounded-xl shadow-lg w-96 relative"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <h2 className="text-2xl font-bold mb-4 text-indigo-700">Doctor Details</h2>
+        <div className="text-sm text-gray-700 space-y-2">
+          <p><strong>Name:</strong> {doctor.user?.name || "N/A"}</p>
+          <p><strong>Email:</strong> {doctor.user?.email || "N/A"}</p>
+          <p><strong>Specialization:</strong> {doctor.specialization || "N/A"}</p>
+          <p><strong>Experience:</strong> {doctor.experience || "N/A"} years</p>
+          <p><strong>Qualifications:</strong> {doctor.qualifications?.join(", ") || "N/A"}</p>
+          <p><strong>Status:</strong> {doctor.isApproved ? "Approved" : "Not Approved"}</p>
         </div>
-    );
+        <div className="mt-6 text-right">
+          <button
+            onClick={onClose}
+            className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700"
+          >
+            Close
+          </button>
+        </div>
+      </div>
+    </div>
+  );
 };
 
 const ApprovedDoctors = ({ refresh, onChange }) => {
-    const [doctors, setDoctors] = useState([]);
-    const [selectedDoctor, setSelectedDoctor] = useState(null);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
+  const [doctors, setDoctors] = useState([]);
+  const [selectedDoctor, setSelectedDoctor] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-    const fetchDoctors = async () => {
-        try {
-            const res = await axios.get(
-                "http://localhost:10/api/landingPage/doctors"
-            );
-            setDoctors(res.data);
-        } catch (err) {
-            console.error("Fetch error:", err);
-            setError("Could not load doctors.");
-        } finally {
-            setLoading(false);
-        }
-    };
+  // State for confirmation modal
+  const [doctorToRemove, setDoctorToRemove] = useState(null);
 
-    const fetchDoctorDetails = async (doctorId) => {
-        try {
-            const res = await axios.get(
-                `http://localhost:10/api/landingPage/doctor/${doctorId}`
-            );
-            setSelectedDoctor(res.data);
-        } catch (err) {
-            console.error("Fetch details error:", err);
-            setError("Failed to load doctor details.");
-        }
-    };
+  const defaultProfileImage = "https://i.pinimg.com/736x/b7/e3/0e/b7e30e74daf4e6c6074e726b5ec2bb9e.jpg";
 
-    const removeDoctor = async (doctorId) => {
-        try {
-            const res = await axios.delete(
-                `http://localhost:10/api/admin/remove-doctor/${doctorId}`
-            );
-            alert(res.data.message || "Doctor removed.");
-            fetchDoctors();
-            onChange(); // Trigger parent refresh
-        } catch (err) {
-            console.error("Remove error:", err);
-            setError("Failed to remove doctor.");
-        }
-    };
+  const fetchDoctors = async () => {
+    try {
+      const res = await axios.get("http://localhost:10/api/landingPage/doctors");
+      setDoctors(res.data);
+    } catch (err) {
+      console.error("Fetch error:", err);
+      setError("Could not load doctors.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
-    useEffect(() => {
-        fetchDoctors(); // Fetch doctors whenever refresh changes
-    }, [refresh]);
+  const fetchDoctorDetails = async (doctorId) => {
+    try {
+      const res = await axios.get(`http://localhost:10/api/landingPage/doctor/${doctorId}`);
+      setSelectedDoctor(res.data);
+    } catch (err) {
+      console.error("Fetch details error:", err);
+      setError("Failed to load doctor details.");
+    }
+  };
 
-    if (loading) return <div className="p-6">Loading doctors...</div>;
-    if (error) return <div className="p-6 text-red-600">{error}</div>;
+  const removeDoctor = async (doctorId) => {
+    try {
+      await axios.delete(`http://localhost:10/api/admin/remove-doctor/${doctorId}`);
+      // alert removed here to prevent multiple alerts
+      fetchDoctors();
+      onChange(); // Trigger parent refresh
+    } catch (err) {
+      console.error("Remove error:", err);
+      setError("Failed to remove doctor.");
+    } finally {
+      setDoctorToRemove(null); // Close modal after action
+    }
+  };
 
-    return (
-        <div className="p-6">
-            <h1 className="text-3xl font-bold mb-6">Approved Doctors</h1>
+  useEffect(() => {
+    fetchDoctors();
+  }, [refresh]);
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {doctors.length === 0 ? (
-                    <p>No approved doctors available.</p>
-                ) : (
-                    doctors.map((doctor) =>
-                        doctor.user ? (
-                            <div
-                                key={doctor._id}
-                                className="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow-sm relative"
-                            >
-                                {/* Profile */}
-                                <div className="flex flex-col items-center pb-10 px-4">
-                                    <img
-                                        className="w-24 h-24 mb-3 rounded-full shadow-lg"
-                                        src={
-                                            doctor.profilePicture ||
-                                            "/Doctor.webp"
-                                        }
-                                        alt={doctor.user.name}
-                                    />
-                                    <h5 className="mb-1 text-xl font-medium text-gray-900">
-                                        {doctor.user.name}
-                                    </h5>
-                                    <span className="text-sm text-gray-500">
-                                        {doctor.specialization || "N/A"}
-                                    </span>
+  if (loading) return <div className="p-6 text-center">Loading doctors...</div>;
+  if (error) return <div className="p-6 text-red-600">{error}</div>;
 
-                                    <div className="flex mt-4 md:mt-6">
-                                        <button
-                                            onClick={() =>
-                                                fetchDoctorDetails(
-                                                    doctor.user._id
-                                                )
-                                            }
-                                            className="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-blue-700 rounded-lg hover:bg-blue-800"
-                                        >
-                                            View Profile
-                                        </button>
-                                        <button
-                                            onClick={() =>
-                                                removeDoctor(doctor.user._id)
-                                            }
-                                            className="ml-2 inline-flex items-center px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 hover:text-red-600"
-                                        >
-                                            Remove
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        ) : null
-                    )
-                )}
-            </div>
+  return (
+    <div className="p-6">
+      <h1 className="text-3xl font-bold text-indigo-700 mb-8 text-center">Approved Doctors</h1>
 
-            {/* Modal */}
-            {selectedDoctor && (
-                <DoctorDetailsModal
-                    doctor={selectedDoctor}
-                    onClose={() => setSelectedDoctor(null)}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {doctors.length === 0 ? (
+          <p>No approved doctors available.</p>
+        ) : (
+          doctors.map((doctor) =>
+            doctor.user ? (
+              <div
+                key={doctor._id}
+                className="bg-white border border-gray-200 rounded-2xl shadow-lg p-6 text-center hover:shadow-2xl transition duration-300"
+              >
+                <img
+                  className="w-24 h-24 mx-auto rounded-full object-cover mb-4 border-4 border-indigo-100 shadow"
+                  src={doctor.profilePicture || defaultProfileImage}
+                  alt={doctor.user.name}
                 />
-            )}
-        </div>
-    );
+                <h5 className="text-xl font-semibold text-indigo-800 mb-1">
+                  {doctor.user.name}
+                </h5>
+                <p className="text-sm text-gray-500 mb-4">
+                  {doctor.specialization || "Specialization N/A"}
+                </p>
+                <div className="flex justify-center gap-3">
+                  <button
+                    onClick={() => fetchDoctorDetails(doctor.user._id)}
+                    className="cursor-pointer px-4 py-2 bg-indigo-600 text-white text-sm rounded hover:bg-indigo-700"
+                  >
+                    View Profile
+                  </button>
+                  <button
+                    onClick={() => setDoctorToRemove(doctor)}
+                    className="px-4 py-2 border border-gray-300 text-sm rounded text-red-500 hover:bg-gray-100"
+                  >
+                    Remove
+                  </button>
+                </div>
+              </div>
+            ) : null
+          )
+        )}
+      </div>
+
+      {/* Doctor Detail Modal */}
+      {selectedDoctor && (
+        <DoctorDetailsModal
+          doctor={selectedDoctor}
+          onClose={() => setSelectedDoctor(null)}
+        />
+      )}
+
+      {/* Confirmation Modal */}
+      {doctorToRemove && (
+        <ConfirmRemoveModal
+          userName={doctorToRemove.user.name}
+          onCancel={() => setDoctorToRemove(null)}
+          onConfirm={() => removeDoctor(doctorToRemove.user._id)}
+        />
+      )}
+    </div>
+  );
 };
 
 export default ApprovedDoctors;

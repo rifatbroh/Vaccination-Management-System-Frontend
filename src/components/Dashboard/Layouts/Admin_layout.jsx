@@ -13,7 +13,7 @@ const Admin_Layout = () => {
 
       {/* Main Content */}
       <div className="admin-right w-[80%] pr-20">
-        <TopNav />
+        {/* <TopNav /> */}
         <div className=" bg-[#fdfdfd] ">
           <Outlet />
         </div>

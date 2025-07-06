@@ -1,251 +1,199 @@
-/* eslint-disable no-unused-vars */
 import axios from "axios";
 import { useEffect, useState } from "react";
 import {
-    FaBirthdayCake,
-    FaEnvelope,
-    FaUserAlt,
-    FaUserTag,
+  FaBirthdayCake,
+  FaEnvelope,
+  FaUserAlt,
+  FaUserTag,
+  FaNotesMedical,
+  FaAllergies,
+  FaDisease,
+  FaPills,
+  FaSyringe,
 } from "react-icons/fa";
 import { useParams } from "react-router-dom";
-import { animated, useSpring } from "react-spring"; // Import from react-spring for animations
+import { useSpring, animated } from "@react-spring/web";
 
-const PatientProfileWithHistory = () => {
-    const { id: userId } = useParams();
+const FancyPatientProfile = () => {
+  const { id: userId } = useParams();
+  const [patient, setPatient] = useState(null);
+  const [medicalHistory, setMedicalHistory] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-    const [patient, setPatient] = useState(null);
-    const [medicalHistory, setMedicalHistory] = useState(null);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
+  const fadeIn = useSpring({
+    opacity: medicalHistory === null && !loading && !error ? 1 : 0,
+    transform:
+      medicalHistory === null && !loading && !error
+        ? "translateY(0px)"
+        : "translateY(-20px)",
+    config: { duration: 600, tension: 200, friction: 20 },
+  });
 
-    // Animation setup using react-spring
-    const [fadeIn, setFadeIn] = useSpring(() => ({
-        opacity: 0,
-        transform: "translateY(-20px)",
-    }));
+  useEffect(() => {
+    if (!userId) return;
+    const fetchData = async () => {
+      setLoading(true);
+      setError(null);
+      try {
+        const profileRes = await axios.get(
+          `http://localhost:10/api/patient/getprofile/${userId}`
+        );
+        setPatient(profileRes.data);
 
-    useEffect(() => {
-        if (!userId) return;
-
-        const fetchData = async () => {
-            setLoading(true);
-
-            try {
-                // Fetch patient profile
-                const profileRes = await axios.get(
-                    `http://localhost:10/api/patient/getprofile/${userId}`
-                );
-                setPatient(profileRes.data);
-
-                // Fetch medical history
-                const historyRes = await fetch(
-                    `http://localhost:10/api/patient/medical-history/${userId}`
-                );
-
-                if (!historyRes.ok) {
-                    if (historyRes.status === 404) {
-                        // Trigger animation for "Upload your medical history"
-                        setFadeIn({ opacity: 1, transform: "translateY(0)" });
-                    }
-                    throw new Error(
-                        `Error fetching medical history: ${historyRes.statusText}`
-                    );
-                }
-
-                const historyJson = await historyRes.json();
-                setMedicalHistory(historyJson);
-            } catch (err) {
-                setError("Failed to fetch data.");
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        fetchData();
-    }, [userId, setFadeIn]);
-
-    if (loading)
-        return <div className="p-6 text-center text-gray-500">Loading...</div>;
-    if (error)
-        return <div className="p-6 text-red-600 text-center">{error}</div>;
-    if (!patient)
-        return (
-            <div className="p-6 text-red-600 text-center">
-                Patient data unavailable.
-            </div>
+        const historyRes = await fetch(
+          `http://localhost:10/api/patient/medical-history/${userId}`
         );
 
-    const { user, dateOfBirth } = patient;
-    const userName = user?.name || "N/A";
-    const userEmail = user?.email || "N/A";
-    const userRole = user?.role || "N/A";
+        if (!historyRes.ok) {
+          if (historyRes.status === 404) setMedicalHistory(null);
+          throw new Error(`Error: ${historyRes.statusText}`);
+        }
+        const historyJson = await historyRes.json();
+        setMedicalHistory(historyJson);
+      } catch (err) {
+        setError("❌ Failed to load profile or medical history.");
+        setMedicalHistory(null);
+      } finally {
+        setLoading(false);
+      }
+    };
 
+    fetchData();
+  }, [userId]);
+
+  const renderList = (items, emptyMsg, Icon, color) => (
+    <ul className="space-y-2 text-gray-700">
+      {items && items.length ? (
+        items.map((item, i) => (
+          <li
+            key={i}
+            className={`flex items-center gap-2 before:content-['•'] before:text-${color}-500`}
+          >
+            {typeof item === "object" ? (
+              <span>
+                <strong>{item.name}</strong> — {item.dosage} — {item.frequency}
+              </span>
+            ) : (
+              item
+            )}
+          </li>
+        ))
+      ) : (
+        <li className="italic text-gray-400">{emptyMsg}</li>
+      )}
+    </ul>
+  );
+
+  if (loading) {
     return (
-        <div className="p-6 max-w-6xl mx-auto">
-            {/* Patient Info Card */}
-            <div className="flex flex-col md:flex-row bg-white shadow-lg rounded-xl overflow-hidden transition hover:shadow-2xl duration-300 mb-8">
-                <div className="w-full md:w-full p-6 bg-gradient-to-br from-blue-50 to-purple-100">
-                    <h2 className="text-3xl font-bold text-blue-800 mb-4 flex items-center gap-2">
-                        <FaUserAlt className="text-blue-500" />
-                        {userName}
-                    </h2>
-                    <ul className="space-y-3 text-gray-700 text-sm">
-                        <li className="flex items-center gap-2">
-                            <FaEnvelope className="text-blue-400" />
-                            <span>
-                                <strong>Email:</strong> {userEmail}
-                            </span>
-                        </li>
-                        <li className="flex items-center gap-2">
-                            <FaUserTag className="text-blue-400" />
-                            <span>
-                                <strong>Role:</strong> {userRole}
-                            </span>
-                        </li>
-                        <li className="flex items-center gap-2">
-                            <FaBirthdayCake className="text-blue-400" />
-                            <span>
-                                <strong>DOB:</strong>{" "}
-                                {dateOfBirth
-                                    ? new Date(dateOfBirth).toLocaleDateString()
-                                    : "Date of Birth not available"}
-                            </span>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-
-            {/* Medical History */}
-            <div className="max-w-3xl mx-auto mt-10 p-6 bg-white shadow-md rounded-lg border border-gray-200">
-                <h2 className="text-2xl font-semibold mb-4 text-gray-800">
-                    Medical History for User ID:{" "}
-                    <span className="font-mono text-indigo-600">{userId}</span>
-                </h2>
-
-                {medicalHistory && (
-                    <>
-                        {/* Allergies */}
-                        <section className="mb-6">
-                            <h3 className="text-xl font-semibold text-indigo-700 mb-2">
-                                Allergies
-                            </h3>
-                            <ul className="list-disc list-inside text-gray-700">
-                                {medicalHistory.allergies.length ? (
-                                    medicalHistory.allergies.map((a, i) => (
-                                        <li
-                                            key={i}
-                                            className="hover:text-indigo-600 transition-colors"
-                                        >
-                                            {a}
-                                        </li>
-                                    ))
-                                ) : (
-                                    <li className="italic text-gray-400">
-                                        None
-                                    </li>
-                                )}
-                            </ul>
-                        </section>
-
-                        {/* Chronic Diseases */}
-                        <section className="mb-6">
-                            <h3 className="text-xl font-semibold text-indigo-700 mb-2">
-                                Chronic Diseases
-                            </h3>
-                            <ul className="list-disc list-inside text-gray-700">
-                                {medicalHistory.chronicDiseases.length ? (
-                                    medicalHistory.chronicDiseases.map(
-                                        (d, i) => (
-                                            <li
-                                                key={i}
-                                                className="hover:text-indigo-600 transition-colors"
-                                            >
-                                                {d}
-                                            </li>
-                                        )
-                                    )
-                                ) : (
-                                    <li className="italic text-gray-400">
-                                        None
-                                    </li>
-                                )}
-                            </ul>
-                        </section>
-
-                        {/* Medications */}
-                        <section className="mb-6">
-                            <h3 className="text-xl font-semibold text-indigo-700 mb-2">
-                                Medications
-                            </h3>
-                            <ul className="list-disc list-inside text-gray-700">
-                                {medicalHistory.medications.length ? (
-                                    medicalHistory.medications.map(
-                                        ({ name, dosage, frequency }, i) => (
-                                            <li
-                                                key={i}
-                                                className="hover:text-indigo-600 transition-colors"
-                                            >
-                                                <span className="font-semibold">
-                                                    {name}
-                                                </span>{" "}
-                                                — {dosage} — {frequency}
-                                            </li>
-                                        )
-                                    )
-                                ) : (
-                                    <li className="italic text-gray-400">
-                                        None
-                                    </li>
-                                )}
-                            </ul>
-                        </section>
-
-                        {/* Vaccination History */}
-                        <section>
-                            <h3 className="text-xl font-semibold text-indigo-700 mb-2">
-                                Vaccination History
-                            </h3>
-                            <ul className="list-disc list-inside text-gray-700">
-                                {medicalHistory.vaccinationHistory.length ? (
-                                    medicalHistory.vaccinationHistory.map(
-                                        ({ vaccine, date }, i) => (
-                                            <li
-                                                key={i}
-                                                className="hover:text-indigo-600 transition-colors"
-                                            >
-                                                {(vaccine && vaccine.name) ||
-                                                    "Unknown vaccine"}{" "}
-                                                —{" "}
-                                                {date
-                                                    ? new Date(
-                                                          date
-                                                      ).toLocaleDateString()
-                                                    : "Date unavailable"}
-                                            </li>
-                                        )
-                                    )
-                                ) : (
-                                    <li className="italic text-gray-400">
-                                        None
-                                    </li>
-                                )}
-                            </ul>
-                        </section>
-                    </>
-                )}
-
-                {/* Animated message when medical history is not found */}
-                {!medicalHistory && (
-                    <animated.div
-                        style={fadeIn}
-                        className="text-xl font-semibold text-blue-600"
-                    >
-                        Upload your medical history
-                    </animated.div>
-                )}
-            </div>
+      <div className="flex justify-center items-center h-screen bg-gradient-to-br from-indigo-100 to-blue-200">
+        <div className="text-center">
+          <div className="w-16 h-16 border-4 border-blue-500 border-dashed rounded-full animate-spin mx-auto"></div>
+          <p className="mt-4 text-gray-700 text-lg">Loading Profile...</p>
         </div>
+      </div>
     );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen flex justify-center items-center bg-red-50">
+        <div className="text-center bg-white shadow-xl p-6 rounded-xl border border-red-200">
+          <h2 className="text-2xl font-bold text-red-600 mb-3">Error</h2>
+          <p className="text-gray-700 mb-4">{error}</p>
+          <button
+            onClick={() => window.location.reload()}
+            className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded"
+          >
+            Retry
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  const { user, dateOfBirth } = patient || {};
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 py-10 px-6">
+      <div className="max-w-6xl mx-auto grid lg:grid-cols-3 gap-10">
+        {/* Profile Card */}
+        <div className="bg-white rounded-xl shadow-lg border border-indigo-100 p-6 transition-transform hover:scale-[1.02]">
+          <div className="flex items-center gap-4 mb-6">
+            <div className="bg-indigo-500 text-white w-16 h-16 flex items-center justify-center rounded-full text-2xl font-bold">
+              {user?.name?.charAt(0)}
+            </div>
+            <div>
+              <h2 className="text-2xl font-extrabold text-indigo-800">{user?.name}</h2>
+              <p className="text-gray-600">{user?.email}</p>
+            </div>
+          </div>
+          <ul className="text-gray-700 space-y-4">
+            <li className="flex items-center gap-3">
+              <FaUserTag className="text-indigo-400" />
+              <span><strong>Role:</strong> {user?.role}</span>
+            </li>
+            <li className="flex items-center gap-3">
+              <FaBirthdayCake className="text-indigo-400" />
+              <span><strong>DOB:</strong> {dateOfBirth ? new Date(dateOfBirth).toLocaleDateString() : 'Not provided'}</span>
+            </li>
+            <li className="flex items-center gap-3">
+              <span className="font-mono bg-indigo-100 text-indigo-800 px-3 py-1 rounded-full text-xs">ID: {userId}</span>
+            </li>
+          </ul>
+        </div>
+
+        {/* Medical History Section */}
+        <div className="lg:col-span-2 bg-white shadow-xl rounded-xl border border-gray-100 p-8">
+          <h2 className="text-3xl font-bold mb-6 text-gray-800 flex items-center gap-3">
+            <FaNotesMedical className="text-blue-600" /> Medical History
+          </h2>
+
+          {medicalHistory ? (
+            <div className="grid md:grid-cols-2 gap-8">
+              <section>
+                <h3 className="text-xl font-semibold mb-2 flex items-center gap-2 text-purple-600">
+                  <FaAllergies /> Allergies
+                </h3>
+                {renderList(medicalHistory.allergies, "No allergies.", FaAllergies, "purple")}
+              </section>
+              <section>
+                <h3 className="text-xl font-semibold mb-2 flex items-center gap-2 text-green-600">
+                  <FaDisease /> Chronic Diseases
+                </h3>
+                {renderList(medicalHistory.chronicDiseases, "No chronic diseases.", FaDisease, "green")}
+              </section>
+              <section>
+                <h3 className="text-xl font-semibold mb-2 flex items-center gap-2 text-red-600">
+                  <FaPills /> Medications
+                </h3>
+                {renderList(medicalHistory.medications, "No medications.", FaPills, "red")}
+              </section>
+              <section>
+                <h3 className="text-xl font-semibold mb-2 flex items-center gap-2 text-teal-600">
+                  <FaSyringe /> Vaccination History
+                </h3>
+                {renderList(
+                  medicalHistory.vaccinationHistory?.map((v) => `${v.vaccine?.name} — ${new Date(v.date).toLocaleDateString()}`),
+                  "No vaccination records.",
+                  FaSyringe,
+                  "teal"
+                )}
+              </section>
+            </div>
+          ) : (
+            <animated.div
+              style={fadeIn}
+              className="text-center bg-blue-100 rounded-lg p-6 text-blue-700 font-medium"
+            >
+              🚫 No medical history available. Please upload your records.
+            </animated.div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
 };
 
-export default PatientProfileWithHistory;
+export default FancyPatientProfile;

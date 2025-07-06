@@ -1,16 +1,15 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import { FaCalendarPlus, FaUserMd, FaSyringe, FaTimes } from "react-icons/fa";
 
 const PatientAppointments = () => {
     const { id: patientId } = useParams();
 
-    // Appointment list states
     const [appointments, setAppointments] = useState([]);
     const [loadingAppointments, setLoadingAppointments] = useState(true);
     const [appointmentsError, setAppointmentsError] = useState(null);
 
-    // Booking form states
     const [doctors, setDoctors] = useState([]);
     const [vaccines, setVaccines] = useState([]);
     const [doctor, setDoctor] = useState("");
@@ -20,10 +19,8 @@ const PatientAppointments = () => {
     const [reason, setReason] = useState("");
     const [bookingMessage, setBookingMessage] = useState(null);
 
-    // Modal state
     const [showModal, setShowModal] = useState(false);
 
-    // Fetch appointments for patient
     useEffect(() => {
         if (!patientId) return;
 
@@ -35,9 +32,8 @@ const PatientAppointments = () => {
                 );
                 setAppointments(res.data);
                 setAppointmentsError(null);
-                // eslint-disable-next-line no-unused-vars
             } catch (err) {
-                setAppointmentsError("Failed to load appointments.");
+                setAppointmentsError("❌ Failed to load appointments.");
             } finally {
                 setLoadingAppointments(false);
             }
@@ -46,7 +42,6 @@ const PatientAppointments = () => {
         fetchAppointments();
     }, [patientId]);
 
-    // Fetch doctors and vaccines when modal is opened
     useEffect(() => {
         if (!showModal) return;
 
@@ -87,10 +82,7 @@ const PatientAppointments = () => {
 
     const handleBookingSubmit = async (e) => {
         e.preventDefault();
-        if (!patientId) {
-            setBookingMessage("❌ Patient ID is missing.");
-            return;
-        }
+        if (!patientId) return;
 
         try {
             await axios.post("http://localhost:10/api/patient/appointment/", {
@@ -101,10 +93,10 @@ const PatientAppointments = () => {
                 time,
                 reason,
             });
+
             setBookingMessage("✅ Appointment booked successfully!");
             resetForm();
 
-            // Refresh appointments list
             const res = await axios.get(
                 `http://localhost:10/api/patient/appointments/${patientId}`
             );
@@ -118,16 +110,16 @@ const PatientAppointments = () => {
 
     if (!patientId) {
         return (
-            <div className="text-red-600 text-center p-6">
+            <div className="text-red-600 text-center p-6 text-lg font-semibold">
                 ❌ No patient ID provided in the URL.
             </div>
         );
     }
 
     return (
-        <div className="max-w-4xl mx-auto p-6 bg-white shadow rounded">
-            <div className="flex justify-between items-center mb-6">
-                <h2 className="text-3xl font-bold text-blue-700">
+        <div className="max-w-5xl mx-auto px-6 py-10">
+            <div className="flex justify-between items-center mb-8">
+                <h2 className="text-4xl font-extrabold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-[#2a56fa]">
                     🗓️ Your Appointments
                 </h2>
                 <button
@@ -135,38 +127,38 @@ const PatientAppointments = () => {
                         resetForm();
                         setShowModal(true);
                     }}
-                    className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition"
+                    className="flex items-center gap-2 bg-gradient-to-r from-indigo-600 to-blue-600 text-white px-5 py-2 rounded-full shadow-md hover:scale-105 transition-transform"
                 >
-                    + Book Appointment
+                    <FaCalendarPlus /> Book Appointment
                 </button>
             </div>
 
-            {/* Appointments List */}
+            {/* Appointment List */}
             {loadingAppointments ? (
-                <div className="text-center p-6 text-blue-600 font-semibold">
+                <div className="text-center text-blue-500 font-semibold">
                     Loading appointments...
                 </div>
             ) : appointmentsError ? (
-                <div className="text-center p-6 text-red-600 font-semibold">
+                <div className="text-center text-red-600 font-semibold">
                     {appointmentsError}
                 </div>
             ) : appointments.length === 0 ? (
-                <div className="text-center p-6 text-gray-600 font-medium">
+                <div className="text-center text-gray-500 font-medium">
                     No appointments found.
                 </div>
             ) : (
-                <ul className="space-y-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     {appointments.map((appt) => (
-                        <li
+                        <div
                             key={appt._id}
-                            className="border rounded p-4 hover:shadow-md transition-shadow"
+                            className="bg-white border rounded-xl shadow hover:shadow-lg transition p-5"
                         >
                             <div className="flex justify-between items-center mb-2">
-                                <h3 className="text-xl font-semibold text-gray-800">
+                                <h3 className="text-xl font-bold text-gray-800">
                                     Dr. {appt.doctor?.name || "N/A"}
                                 </h3>
                                 <span
-                                    className={`px-3 py-1 rounded-full text-sm font-semibold ${
+                                    className={`text-sm px-3 py-1 rounded-full font-semibold ${
                                         appt.status === "approved"
                                             ? "bg-green-100 text-green-700"
                                             : appt.status === "rejected"
@@ -178,56 +170,44 @@ const PatientAppointments = () => {
                                         appt.status.slice(1)}
                                 </span>
                             </div>
-
-                            <p className="text-gray-600 mb-1">
+                            <p className="text-gray-600">
+                                <FaSyringe className="inline mr-2" />
                                 <strong>Vaccine:</strong>{" "}
-                                {appt.vaccine?.name || "None"}
+                                {appt.vaccine?.name || "N/A"}
                             </p>
-
-                            <p className="text-gray-600 mb-1">
+                            <p className="text-gray-600">
                                 <strong>Date:</strong>{" "}
-                                {new Date(appt.date).toLocaleDateString(
-                                    undefined,
-                                    {
-                                        year: "numeric",
-                                        month: "long",
-                                        day: "numeric",
-                                    }
-                                )}
+                                {new Date(appt.date).toLocaleDateString()}
                             </p>
-
-                            <p className="text-gray-600 mb-1">
-                                <strong>Created At:</strong>{" "}
+                            <p className="text-gray-600">
+                                <strong>Created:</strong>{" "}
                                 {new Date(appt.createdAt).toLocaleString()}
                             </p>
-
                             <p className="text-gray-600">
-                                <strong>Doctor Email:</strong>{" "}
+                                <strong>Email:</strong>{" "}
                                 {appt.doctor?.email || "N/A"}
                             </p>
-                        </li>
+                        </div>
                     ))}
-                </ul>
+                </div>
             )}
 
             {/* Modal */}
             {showModal && (
                 <>
                     <div
-                        className="fixed inset-0 bg-black bg-opacity-40 z-40"
+                        className="fixed inset-0 backdrop-blur-sm overflow-y-auto bg-opacity-40 z-40"
                         onClick={() => setShowModal(false)}
                     ></div>
-
                     <div className="fixed inset-0 flex items-center justify-center z-50 px-4">
-                        <div className="bg-white rounded shadow-lg max-w-md w-full p-6 relative">
+                        <div className="bg-white bg-opacity-95 backdrop-blur-xl rounded-xl shadow-lg w-full max-w-xl p-8 relative">
                             <button
                                 onClick={() => setShowModal(false)}
-                                className="absolute top-3 right-3 text-gray-500 hover:text-gray-800"
-                                aria-label="Close modal"
+                                className="absolute top-4 right-4 text-gray-500 hover:text-red-600 text-xl"
                             >
-                                ✕
+                                <FaTimes />
                             </button>
-                            <h3 className="text-2xl font-bold mb-4 text-blue-700">
+                            <h3 className="text-2xl font-bold text-blue-700 mb-4">
                                 📅 Book an Appointment
                             </h3>
 
@@ -243,117 +223,87 @@ const PatientAppointments = () => {
                                 </div>
                             )}
 
-                            <form
-                                onSubmit={handleBookingSubmit}
-                                className="space-y-4"
-                            >
-                                {/* Doctor Selection */}
+                            <form onSubmit={handleBookingSubmit} className="space-y-4">
+                                {/* Doctor */}
                                 <div>
-                                    <label className="block mb-1 font-medium">
+                                    <label className="block font-semibold mb-1">
                                         Select Doctor
                                     </label>
                                     <select
                                         value={doctor}
-                                        onChange={(e) =>
-                                            setDoctor(e.target.value)
-                                        }
-                                        className="w-full border px-3 py-2 rounded"
+                                        onChange={(e) => setDoctor(e.target.value)}
+                                        className="w-full border px-4 py-2 rounded focus:ring-2 focus:ring-blue-400"
                                         required
                                     >
-                                        <option value="">
-                                            -- Select Doctor --
-                                        </option>
+                                        <option value="">-- Choose --</option>
                                         {doctors.map((doc) => (
-                                            <option
-                                                key={doc.user?._id}
-                                                value={doc.user?._id}
-                                            >
-                                                {doc.user?.name} -{" "}
-                                                {doc.specialization || "N/A"}
+                                            <option key={doc.user?._id} value={doc.user?._id}>
+                                                {doc.user?.name} — {doc.specialization || "N/A"}
                                             </option>
                                         ))}
                                     </select>
                                 </div>
 
-                                {/* Vaccine Selection */}
+                                {/* Vaccine */}
                                 <div>
-                                    <label className="block mb-1 font-medium">
+                                    <label className="block font-semibold mb-1">
                                         Select Vaccine
                                     </label>
                                     <select
                                         value={vaccine}
-                                        onChange={(e) =>
-                                            setVaccine(e.target.value)
-                                        }
-                                        className="w-full border px-3 py-2 rounded"
+                                        onChange={(e) => setVaccine(e.target.value)}
+                                        className="w-full border px-4 py-2 rounded focus:ring-2 focus:ring-blue-400"
                                         required
                                     >
-                                        <option value="">
-                                            -- Select Vaccine --
-                                        </option>
-                                        {vaccines.map((vax) => (
-                                            <option
-                                                key={vax._id}
-                                                value={vax._id}
-                                            >
-                                                {vax.name}
+                                        <option value="">-- Choose --</option>
+                                        {vaccines.map((v) => (
+                                            <option key={v._id} value={v._id}>
+                                                {v.name}
                                             </option>
                                         ))}
                                     </select>
                                 </div>
 
-                                {/* Date Input */}
+                                {/* Date */}
                                 <div>
-                                    <label className="block mb-1 font-medium">
-                                        Date
-                                    </label>
+                                    <label className="block font-semibold mb-1">Date</label>
                                     <input
                                         type="date"
                                         value={date}
-                                        onChange={(e) =>
-                                            setDate(e.target.value)
-                                        }
-                                        className="w-full border px-3 py-2 rounded"
+                                        onChange={(e) => setDate(e.target.value)}
+                                        className="w-full border px-4 py-2 rounded focus:ring-2 focus:ring-blue-400"
                                         required
                                     />
                                 </div>
 
-                                {/* Time Input */}
+                                {/* Time */}
                                 <div>
-                                    <label className="block mb-1 font-medium">
-                                        Time
-                                    </label>
+                                    <label className="block font-semibold mb-1">Time</label>
                                     <input
                                         type="time"
                                         value={time}
-                                        onChange={(e) =>
-                                            setTime(e.target.value)
-                                        }
-                                        className="w-full border px-3 py-2 rounded"
+                                        onChange={(e) => setTime(e.target.value)}
+                                        className="w-full border px-4 py-2 rounded focus:ring-2 focus:ring-blue-400"
                                         required
                                     />
                                 </div>
 
-                                {/* Reason Input */}
+                                {/* Reason */}
                                 <div>
-                                    <label className="block mb-1 font-medium">
-                                        Reason / Notes
-                                    </label>
+                                    <label className="block font-semibold mb-1">Reason</label>
                                     <textarea
                                         value={reason}
-                                        onChange={(e) =>
-                                            setReason(e.target.value)
-                                        }
-                                        className="w-full border px-3 py-2 rounded"
+                                        onChange={(e) => setReason(e.target.value)}
+                                        className="w-full border px-4 py-2 rounded focus:ring-2 focus:ring-blue-400"
                                         rows={3}
-                                        placeholder="Optional notes about your appointment..."
+                                        placeholder="Optional notes..."
                                     ></textarea>
                                 </div>
 
-                                {/* Submit Button */}
+                                {/* Submit */}
                                 <button
                                     type="submit"
-                                    className="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 w-full"
+                                    className="w-full bg-gradient-to-r from-indigo-600 to-blue-600 text-white py-2 rounded-full font-semibold hover:scale-105 transition-transform"
                                 >
                                     Book Appointment
                                 </button>

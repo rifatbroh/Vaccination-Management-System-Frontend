@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { useSpring } from "react-spring"; // Import from react-spring for animations
+import { useSpring } from "@react-spring/web";
 
 function MedicalHistoryByUserId() {
     const { id: userId } = useParams();
