@@ -18,11 +18,11 @@ import Doctor_layout from "./components/Dashboard/Layouts/Doctor_layout";
 import Patient_layout from "./components/Dashboard/Layouts/Patient_layout";
 import Patient_settings from "./components/Dashboard/Patient/paitentSetting/Patient_settings";
 import Patient_appoinments from "./components/Dashboard/Patient/Patient_appoinments";
-import PatientProfile from "./components/Dashboard/Patient/PatientProfile";
+import PatientProfile from "./components/Dashboard/Patient/patientProfile/PatientProfile";
 import Landing_Page from "./pages/Landing_Page";
 
 import BookAppointmentForm from "./components/Dashboard/Patient/BookAppointmentForm";
-import Medical_history from "./components/Dashboard/Patient/Medical_history";
+import { default as Medical_history } from "./components/Dashboard/Patient/patientProfile/Medical_history";
 
 const App = () => {
     return (
@@ -39,7 +39,6 @@ const App = () => {
                     path="/taking-appointment/:id"
                     element={<Patient_appoinments />}
                 />
-                
 
                 {/* <Route path="/doc/:id" element={<DoctorProfile />} /> */}
 
@@ -84,10 +83,6 @@ const App = () => {
                 {/* Patient Layout */}
                 <Route path="/patient" element={<Patient_layout />}>
                     <Route path="dashboard/:id" element={<PatientProfile />} />
-                    <Route
-                        path="medical-history/:id"
-                        element={<Medical_history />}
-                    />
                     <Route
                         path="appointments/:id"
                         element={<Patient_appoinments />}
