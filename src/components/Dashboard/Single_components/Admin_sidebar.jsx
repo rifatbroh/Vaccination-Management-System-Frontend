@@ -58,7 +58,7 @@ const Admin_Sidebar = ({ role }) => {
           <>
             <MenuItem icon={<FaTachometerAlt />} label="Dashboard" to="/admin/dashboard" />
             <MenuItem icon={<FaUserMd />} label="Doctors" to="/admin/doctor_management" />
-            <MenuItem icon={<FaSyringe />} label="Vaccine Management" to="/admin/Vaccine-management" />
+            <MenuItem icon={<FaSyringe />} label="Vaccine " to="/admin/Vaccine-management" />
             <MenuItem icon={<FaUsers />} label="Users" to="/admin/all-user" />
           </>
         );

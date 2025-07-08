@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 
-// Modal to confirm delete
+// Confirm delete modal
 const ConfirmRemoveModal = ({ userName, onCancel, onConfirm }) => (
     <div className="fixed inset-0 z-50 flex justify-center items-center bg-black/30">
         <div className="bg-white p-6 rounded-lg shadow-md w-96">
@@ -26,6 +26,7 @@ const ConfirmRemoveModal = ({ userName, onCancel, onConfirm }) => (
     </div>
 );
 
+// Doctor detail modal
 const DoctorDetailsModal = ({ doctor, onClose }) => (
     <div className="fixed inset-0 bg-black/30 flex justify-center items-center z-50">
         <div
@@ -36,26 +37,12 @@ const DoctorDetailsModal = ({ doctor, onClose }) => (
                 Doctor Details
             </h2>
             <div className="text-sm text-gray-700 space-y-2">
-                <p>
-                    <strong>Name:</strong> {doctor.user?.name}
-                </p>
-                <p>
-                    <strong>Email:</strong> {doctor.user?.email}
-                </p>
-                <p>
-                    <strong>Specialization:</strong> {doctor.specialization}
-                </p>
-                <p>
-                    <strong>Experience:</strong> {doctor.experience} years
-                </p>
-                <p>
-                    <strong>Qualifications:</strong>{" "}
-                    {doctor.qualifications?.join(", ")}
-                </p>
-                <p>
-                    <strong>Status:</strong>{" "}
-                    {doctor.isApproved ? "Approved" : "Pending"}
-                </p>
+                <p><strong>Name:</strong> {doctor.user?.name}</p>
+                <p><strong>Email:</strong> {doctor.user?.email}</p>
+                <p><strong>Specialization:</strong> {doctor.specialization}</p>
+                <p><strong>Experience:</strong> {doctor.experience} years</p>
+                <p><strong>Qualifications:</strong> {doctor.qualifications?.join(", ")}</p>
+                <p><strong>Status:</strong> {doctor.isApproved ? "Approved" : "Pending"}</p>
             </div>
             <div className="mt-6 text-right">
                 <button
@@ -69,6 +56,7 @@ const DoctorDetailsModal = ({ doctor, onClose }) => (
     </div>
 );
 
+// Main Component
 const ApprovedDoctors = ({ refresh, onChange }) => {
     const [doctors, setDoctors] = useState([]);
     const [selectedDoctor, setSelectedDoctor] = useState(null);
@@ -77,9 +65,7 @@ const ApprovedDoctors = ({ refresh, onChange }) => {
 
     const fetchDoctors = async () => {
         try {
-            const res = await axios.get(
-                "http://localhost:10/api/landingPage/doctors"
-            );
+            const res = await axios.get("http://localhost:10/api/landingPage/doctors");
             setDoctors(res.data);
         } catch (err) {
             console.error("Error fetching approved doctors:", err);
@@ -90,9 +76,7 @@ const ApprovedDoctors = ({ refresh, onChange }) => {
 
     const fetchDoctorDetails = async (id) => {
         try {
-            const res = await axios.get(
-                `http://localhost:10/api/landingPage/doctor/${id}`
-            );
+            const res = await axios.get(`http://localhost:10/api/landingPage/doctor/${id}`);
             setSelectedDoctor(res.data);
         } catch (err) {
             console.error("Error fetching doctor:", err);
@@ -101,9 +85,7 @@ const ApprovedDoctors = ({ refresh, onChange }) => {
 
     const removeDoctor = async (id) => {
         try {
-            await axios.delete(
-                `http://localhost:10/api/admin/remove-doctor/${id}`
-            );
+            await axios.delete(`http://localhost:10/api/admin/remove-doctor/${id}`);
             onChange(); // Notify parent to refresh both lists
         } catch (err) {
             console.error("Error removing doctor:", err);
@@ -114,47 +96,47 @@ const ApprovedDoctors = ({ refresh, onChange }) => {
         fetchDoctors();
     }, [refresh]);
 
-    if (loading)
+    if (loading) {
         return <div className="p-6 text-center">Loading doctors...</div>;
+    }
 
     return (
         <div className="p-6">
             <h1 className="text-3xl font-bold text-indigo-700 mb-8 text-center">
                 Approved Doctors
             </h1>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 {doctors.map((doc) =>
                     doc.user ? (
                         <div
                             key={doc._id}
-                            className="bg-white p-4 rounded-lg shadow hover:shadow-xl transition"
+                            className="bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition border text-center"
                         >
                             <img
                                 src={
-                                    doc.profilePicture ||
-                                    "https://via.placeholder.com/100"
+                                    doc.profilePicture?.trim()
+                                        ? doc.profilePicture
+                                        : "https://i.pinimg.com/736x/fd/40/ac/fd40aca2ad6f04a772967925760dccab.jpg"
                                 }
                                 alt={doc.user.name}
-                                className="w-20 h-20 rounded-full mx-auto mb-3"
+                                className="w-24 h-24 mx-auto rounded-full border border-indigo-200 mb-4"
                             />
-                            <h4 className="text-center font-semibold">
-                                {doc.user.name}
+                            <h4 className="text-lg font-bold text-indigo-800">
+                                Dr. {doc.user.name}
                             </h4>
-                            <p className="text-center text-sm text-gray-500">
-                                {doc.specialization}
+                            <p className="text-sm text-gray-600 mt-1">
+                                {doc.specialization || "General Physician"}
                             </p>
-                            <div className="flex justify-center gap-2 mt-4">
+                            <div className="flex justify-center gap-3 mt-4">
                                 <button
-                                    onClick={() =>
-                                        fetchDoctorDetails(doc.user._id)
-                                    }
-                                    className="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600"
+                                    onClick={() => fetchDoctorDetails(doc.user._id)}
+                                    className="px-4 py-1.5 text-sm bg-indigo-600 text-white rounded hover:bg-indigo-700"
                                 >
-                                    View
+                                    View Profile
                                 </button>
                                 <button
                                     onClick={() => setDoctorToRemove(doc)}
-                                    className="px-3 py-1 border text-red-600 rounded hover:bg-gray-100"
+                                    className="px-4 py-1.5 text-sm border border-red-600 text-red-600 rounded hover:bg-red-50"
                                 >
                                     Remove
                                 </button>

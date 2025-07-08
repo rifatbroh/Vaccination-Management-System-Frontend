@@ -1,37 +1,45 @@
 import React from "react";
+import BlurText from "./BlurText"; // ✅ Adjust path if needed
 
 const Hero = () => {
     return (
         <div>
-            <div className="hero-area w-full h-[710px] bg-[#002570] flex items-center justify-start rounded-b-[300px]">
-                {/* Starting hero area */}
-                <div className="hero-content flex justify-start w-full gap-15 px-35">
-                    <div className="hero-left max-w-lg pt-20">
-                        {/* Added animation classes to the h1 */}
-                        <p className="text-7xl text-white font-bold animate-fadeInUp">
-                            Best caring, <br /> Better Doctors
-                        </p>
-                        {/* Added animation classes to the p tag with a slight delay */}
-                        <p className="text-xl text-white py-10 animate-fadeInUp animate-delay-200">
+            <div className="hero-area w-full h-[710px] bg-[#002570] flex items-center justify-start rounded-b-[300px] px-23 ">
+                <div className="hero-content flex flex-wrap justify-between items-center w-full px-10 mt-[-50px]">
+                    <div className="hero-left max-w-xl pt-20">
+                        {/* ✅ Animated Heading with BlurText */}
+                        <BlurText
+                            text="Best caring, Better Doctors"
+                            delay={150}
+                            animateBy="words"
+                            direction="top"
+                            className="text-6xl md:text-7xl text-white font-bold  leading-tight"
+                        />
+
+                        {/* ✅ Static paragraph or optionally replace with BlurText too */}
+                        <p className="text-lg md:text-xl text-white py-6 animate-fadeInUp animate-delay-200">
                             We have the most powerful Doctors, Vaccination,
                             and Treatments all over the world. We treat you like a friend
                             and serve properly.
                         </p>
-                        <div className="btn-le">
+
+                        <div className="mt-4">
                             <a
                                 href="booking.html"
-                                className="text-lg bg-white px-8 py-2 rounded-full font-semibold text-black w-max shadow-md hover:bg-gray-100 transition"
+                                className="text-lg bg-white px-8 py-2 rounded-full font-semibold text-black shadow-md hover:bg-gray-100 transition"
                             >
                                 Booking
                             </a>
                         </div>
                     </div>
-                    <div className="hero-right ml-30">
-                        <img src="/src/assets/img.png" alt="Doctor" />
+
+                    <div className="hero-right hidden md:block pt-20">
+                        <img src="/src/assets/img.png" alt="Doctor" className="w-[400px]" />
                     </div>
                 </div>
             </div>
-            {/* Added style block for the new animations */}
+
+            {/* Optional: Keep fadeInUp keyframe if subtitle uses it */}
             <style>
                 {`
                 @keyframes fadeInUp {
