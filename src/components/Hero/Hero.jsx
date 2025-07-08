@@ -1,10 +1,13 @@
 import React from "react";
-import BlurText from "./BlurText"; // ✅ Adjust path if needed
+import BlurText from "./BlurText"; 
+import SplashCursor from "./SplashCursor";
+
 
 const Hero = () => {
     return (
         <div>
             <div className="hero-area w-full h-[710px] bg-[#002570] flex items-center justify-start rounded-b-[300px] px-23 ">
+                {/* <SplashCursor /> */}
                 <div className="hero-content flex flex-wrap justify-between items-center w-full px-10 mt-[-50px]">
                     <div className="hero-left max-w-xl pt-20">
                         {/* ✅ Animated Heading with BlurText */}
