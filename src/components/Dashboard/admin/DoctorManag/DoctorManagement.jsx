@@ -1,11 +1,13 @@
-import React from "react";
+import { useState } from "react";
 import ApprovedDoctors from "./ApprovedDoctors";
 import DoctorApprovalDashboard from "./PendingDoctors";
 
 export default function DoctorManagement() {
-    const [refresh, setRefresh] = React.useState(false);
+    const [refresh, setRefresh] = useState(false);
 
-    const handleRefresh = () => setRefresh((prev) => !prev); // Toggle refresh
+    const handleRefresh = () => {
+        setRefresh((prev) => !prev);
+    };
 
     return (
         <div>

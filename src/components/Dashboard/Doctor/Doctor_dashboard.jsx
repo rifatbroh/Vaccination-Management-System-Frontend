@@ -11,11 +11,11 @@ const Doctor_dashboard = () => {
     const fetchDoctorProfile = async () => {
         try {
             const response = await fetch(
-                `http://localhost:10/api/doctor/Profile/${id}`
+                `http://localhost:0010/api/doctor/Profile/${id}` // ✅ Correct port
             );
             const data = await response.json();
             if (response.ok) {
-                setDoctorProfile(data.doctorProfile || data); // Adjust if backend wraps profile in doctorProfile
+                setDoctorProfile(data.doctorProfile || data);
                 setError(null);
             } else {
                 setError("Failed to load profile.");
@@ -78,17 +78,19 @@ const Doctor_dashboard = () => {
 
         try {
             const response = await fetch(
-                `http://localhost:5000/api/doctor/updateProfile/${id}`,
+                `http://localhost:0010/api/doctor/updateProfile/${doctorProfile.user._id}`, // ✅ Use user._id
                 {
                     method: "PUT",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ profile: updatedData }), // <== wrap in 'profile'
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({ profile: updatedData }),
                 }
             );
 
             if (response.ok) {
                 alert("Profile updated!");
-                setIsProfileModalOpen(false);
+                closeProfileModal();
                 fetchDoctorProfile();
             } else {
                 const errorData = await response.json();
@@ -105,47 +107,50 @@ const Doctor_dashboard = () => {
         <div className="flex flex-col mt-5 bg-gradient-to-br from-blue-50 to-indigo-100 font-sans">
             <main className="flex-1 p-4 md:p-10">
                 <div className="max-w-7xl mx-auto">
-                    {/* CARD SECTION */}
+                    {/* Dashboard Cards */}
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
-                        <div className="bg-white p-6 rounded-2xl shadow-md border border-gray-100 hover:shadow-lg transition-all duration-200">
+                        {/* Appointments */}
+                        <div className="bg-white p-6 rounded-2xl shadow-md border hover:shadow-lg transition">
                             <h3 className="text-xl font-semibold text-blue-600 mb-3">
                                 Upcoming Appointments
                             </h3>
                             <p className="text-gray-600">
                                 You have 5 appointments scheduled.
                             </p>
-                            <button className="mt-4 px-5 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition duration-200 text-sm">
+                            <button className="mt-4 px-5 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 text-sm">
                                 View All
                             </button>
                         </div>
 
-                        <div className="bg-white p-6 rounded-2xl shadow-md border border-gray-100 hover:shadow-lg transition-all duration-200">
+                        {/* New Patients */}
+                        <div className="bg-white p-6 rounded-2xl shadow-md border hover:shadow-lg transition">
                             <h3 className="text-xl font-semibold text-green-600 mb-3">
                                 New Patients
                             </h3>
                             <p className="text-gray-600">
                                 3 new patients registered today.
                             </p>
-                            <button className="mt-4 px-5 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition duration-200 text-sm">
+                            <button className="mt-4 px-5 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 text-sm">
                                 Manage Patients
                             </button>
                         </div>
 
-                        <div className="bg-white p-6 rounded-2xl shadow-md border border-gray-100 hover:shadow-lg transition-all duration-200">
+                        {/* Messages */}
+                        <div className="bg-white p-6 rounded-2xl shadow-md border hover:shadow-lg transition">
                             <h3 className="text-xl font-semibold text-purple-600 mb-3">
                                 Messages
                             </h3>
                             <p className="text-gray-600">
                                 You have 2 unread messages.
                             </p>
-                            <button className="mt-4 px-5 py-2 bg-purple-500 text-white rounded-lg hover:bg-purple-600 transition duration-200 text-sm">
+                            <button className="mt-4 px-5 py-2 bg-purple-500 text-white rounded-lg hover:bg-purple-600 text-sm">
                                 Read Messages
                             </button>
                         </div>
                     </div>
 
-                    {/* PROFILE SECTION */}
-                    <div className="bg-white p-6 md:p-10 rounded-3xl mt-10 shadow-xl border border-gray-200 hover:shadow-2xl transition-all duration-300 ease-in-out">
+                    {/* Profile Section */}
+                    <div className="bg-white p-6 md:p-10 rounded-3xl mt-10 shadow-xl border hover:shadow-2xl">
                         <h2 className="text-2xl font-extrabold text-gray-900 mb-6 border-b pb-4 flex items-center gap-2">
                             <svg
                                 className="w-6 h-6 text-indigo-600"
@@ -156,60 +161,54 @@ const Doctor_dashboard = () => {
                             </svg>
                             Your Profile Overview
                         </h2>
+
                         {error && <p className="text-red-500">{error}</p>}
+
                         {doctorProfile ? (
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-y-4 gap-x-10 text-gray-800 text-md">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-gray-800 text-md">
                                 <p>
-                                    <span className="font-semibold">Name:</span>{" "}
+                                    <strong>Name:</strong>{" "}
                                     {doctorProfile.user?.name || "N/A"}
                                 </p>
                                 <p>
-                                    <span className="font-semibold">
-                                        Certifications:
-                                    </span>{" "}
+                                    <strong>Specialization:</strong>{" "}
+                                    {doctorProfile.specialization || "N/A"}
+                                </p>
+                                <p>
+                                    <strong>Experience:</strong>{" "}
+                                    {doctorProfile.experience} years
+                                </p>
+                                <p>
+                                    <strong>Qualifications:</strong>{" "}
+                                    {doctorProfile.qualifications?.join(", ") ||
+                                        "N/A"}
+                                </p>
+                                <p>
+                                    <strong>Certifications:</strong>{" "}
                                     {doctorProfile.certifications?.join(", ") ||
                                         "N/A"}
                                 </p>
                                 <p>
-                                    <span className="font-semibold">
-                                        Specialization:
-                                    </span>{" "}
-                                    {doctorProfile.specialization || "N/A"}
-                                </p>
-                                <p>
-                                    <span className="font-semibold">
-                                        Working Days:
-                                    </span>{" "}
+                                    <strong>Working Days:</strong>{" "}
                                     {doctorProfile.workingDays?.join(", ") ||
                                         "N/A"}
                                 </p>
                                 <p>
-                                    <span className="font-semibold">
-                                        Experience:
-                                    </span>{" "}
-                                    {doctorProfile.experience} years
-                                </p>
-                                <p>
-                                    <span className="font-semibold">
-                                        Approval Status:
-                                    </span>{" "}
-                                    <span className="text-green-600 font-bold">
+                                    <strong>Approval Status:</strong>{" "}
+                                    <span
+                                        className={
+                                            doctorProfile.isApproved
+                                                ? "text-green-600 font-bold"
+                                                : "text-red-600 font-bold"
+                                        }
+                                    >
                                         {doctorProfile.isApproved
                                             ? "Approved"
                                             : "Not Approved"}
                                     </span>
                                 </p>
                                 <p>
-                                    <span className="font-semibold">
-                                        Qualifications:
-                                    </span>{" "}
-                                    {doctorProfile.qualifications?.join(", ") ||
-                                        "N/A"}
-                                </p>
-                                <p>
-                                    <span className="font-semibold">
-                                        Rating:
-                                    </span>{" "}
+                                    <strong>Rating:</strong>{" "}
                                     {doctorProfile.rating || "No rating yet"}
                                 </p>
                             </div>
@@ -220,7 +219,7 @@ const Doctor_dashboard = () => {
                         <div className="flex justify-center mt-8">
                             <button
                                 onClick={openProfileModal}
-                                className="flex items-center gap-2 px-6 py-2 bg-indigo-600 text-white rounded-full shadow hover:bg-indigo-700 transition-all duration-200"
+                                className="flex items-center gap-2 px-6 py-2 bg-indigo-600 text-white rounded-full shadow hover:bg-indigo-700"
                             >
                                 <svg
                                     className="w-5 h-5"
@@ -239,9 +238,9 @@ const Doctor_dashboard = () => {
                 </div>
             </main>
 
-            {/* MODAL */}
+            {/* Modal */}
             {isProfileModalOpen && editingProfile && (
-                <div className="fixed inset-0 backdrop-blur-sm overflow-y-auto bg-opacity-50 flex justify-center items-center z-50 p-4">
+                <div className="fixed inset-0 backdrop-blur-sm bg-black bg-opacity-20 flex justify-center items-center z-50 p-4">
                     <form
                         onSubmit={handleSaveChanges}
                         className="bg-white p-6 rounded-lg shadow-xl w-full max-w-lg space-y-4"
