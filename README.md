@@ -16,7 +16,7 @@ The Vaccination-Management-System-Frontend is a web application built with React
 - **Reporting:** Generates reports on vaccination statistics.
 - **Email Notifications:** Sends automated email notifications for appointment reminders and updates.
 
-## Technologies Used
+## Technologies Explained
 
 - **React:** A JavaScript library for building user interfaces.
 - **React Router DOM:** For handling navigation and routing within the application.
@@ -28,6 +28,13 @@ The Vaccination-Management-System-Frontend is a web application built with React
 - **JWT Decode:** For decoding JSON Web Tokens.
 - **React Spring:** For animations.
 - **React Web Vitals:** For measuring performance in real time.
+
+## Technologies Used
+  
+  <p align="">
+  <!-- 🔹 First Row (10 items) -->
+  <img src="https://skillicons.dev/icons?i=react,tailwind,js,nodejs,express,mongodb" />
+</p>
 
 ## Prerequisites
 
